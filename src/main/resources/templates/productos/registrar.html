@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head th:replace="layout/layout :: head"></head>
+
+    <body id="page-top">
+
+        <nav th:replace="layout/layout :: nav"></nav>
+
+        <div id="wrapper">
+
+            <ul th:replace="layout/layout :: sidebar"></ul>
+
+            <div id="content-wrapper">
+
+                <div class="container-fluid">
+
+                    <!-- Breadcrumbs-->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/productos/ver_productos}">Productos</a>
+                        </li>
+                        <li class="breadcrumb-item active">Registrar Producto</li>
+                    </ol>
+
+                    <!-- Ver Clientes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area"></i>
+                            Registrar Producto</div>
+                        <div class="card-body">
+                            <form class="needs-validation" novalidate style="margin: 20px;"
+                                  th:action="@{/productos/registrar}"
+                                  th:object="${producto}" method="post" enctype="multipart/form-data"> 
+                                <div class="form-row">
+                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-12 col-xl-12" th:if="${editar}">
+                                            <label th:if="${editar}">Imagen: </label> <br th:if="${editar}">
+                                            <img th:src="@{'/uploads/productos/' + ${producto.foto}}"
+                                                 th:if="${editar}" style="max-width: 25%" class="img-thumbnail rounded">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <div class="custom-file">
+                                            <label for="imagen" th:text="${inf_img}"></label>
+                                            <input type="file" name="file" class="form-control-file" id="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <label for="nombre">Nombre: </label>
+                                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" th:field="*{nombre}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="precio">Precio: </label>
+                                        <input type="number" class="form-control" id="precio" placeholder="Precio" min="0" th:field="*{precio}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="buscar_proveedor">Proveedor: </label>
+                                        <input type="text" class="form-control" id="buscar_proveedor" name="buscar_proveedor" th:placeholder="${inf1}"/>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <label for="buscar_categoria">Categoria: </label>
+                                        <input type="text" class="form-control" id="buscar_categoria" name="buscar_categoria" th:placeholder="${inf2}"/>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="buscar_marca">Marca: </label>
+                                        <input type="text" class="form-control" id="buscar_marca" name="buscar_marca" th:placeholder="${inf3}"/>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="fecha_de_envasado">Fecha de Envasado: </label>
+                                        <input type="date" class="form-control" id="fecha_de_envasado" placeholder="Fecha de Envasado" th:field="*{fecha_envasado}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="fecha_de_vencimiento">Fecha de Vencimiento: </label>
+                                        <input type="date" class="form-control" id="fecha_de_vencimiento" placeholder="Fecha de Vencimiento" th:field="*{fecha_vencimiento}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="stock">Stock: </label>
+                                        <input type="number" class="form-control" id="stock" placeholder="Stock" min="0" th:field="*{stock}">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="ingresar_proveedor" name="ingresar_proveedor" th:field="*{proveedor}" required />
+                                <input type="hidden" id="ingresar_categoria" name="ingresar_categoria" th:field="*{categoria}" required />
+                                <input type="hidden" id="ingresar_marca" name="ingresar_marca" th:field="*{marca}" required />
+
+                                <button class="btn btn-primary" type="submit" style="margin-left: 2px;">Enviar</button> <a class="btn btn-danger" th:href="@{/productos/ver_productos}">Cancelar</a>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- /.content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <div th:replace="layout/layout :: logout"></div>
+        <a th:replace="layout/layout :: scroll"></a>
+        <footer th:replace="layout/layout :: footer"></footer>
+        <script th:replace="clientes/js/autocomplete-ciudad :: javascript"></script>
+        <script th:replace="productos/js/autocomplete-marca :: javascript_marca"></script>
+        <script th:replace="productos/js/autocomplete-categoria :: javascript_categoria"></script>
+        <script th:replace="productos/js/autocomplete-proveedor :: javascript_proveedor"></script>
+
+    </body>
+
+</html>

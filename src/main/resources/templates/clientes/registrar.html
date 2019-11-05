@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head th:replace="layout/layout :: head"></head>
+
+    <body id="page-top">
+
+        <nav th:replace="layout/layout :: nav"></nav>
+
+        <div id="wrapper">
+
+            <ul th:replace="layout/layout :: sidebar"></ul>
+
+            <div id="content-wrapper">
+
+                <div class="container-fluid">
+
+                    <!-- Breadcrumbs-->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/clientes/ver_clientes}">Clientes</a>
+                        </li>
+                        <li class="breadcrumb-item active">Registrar Cliente</li>
+                    </ol>
+
+                    <!-- Ver Clientes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area"></i>
+                            Registrar Cliente</div>
+                        <div class="card-body">
+                            <form class="needs-validation" novalidate style="margin: 20px;"
+                                  th:action="@{/clientes/registrar}"
+                                  th:object="${cliente}" method="post"> 
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                        <label for="nombre">Nombre: </label>
+                                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" th:field="*{nombre}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="apellido">Apellido: </label>
+                                        <input type="text" class="form-control" id="apellido" placeholder="Apellido" th:field="*{apellido}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                        <label for="tipo">Tipo de documento: </label>
+                                        <select class="form-control" th:field="*{tipo}">
+                                            <option th:each="t: ${tiposdocumentos}" th:text="${t.tipo}" th:value="${t.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="documento">Documento: </label>
+                                        <input type="text" class="form-control" id="documento" placeholder="Documento" th:field="*{doc}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <label for="email">Email: </label>
+                                        <input type="email" class="form-control" id="email" placeholder="Email" th:field="*{email}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="celular">Celular: </label>
+                                        <input type="text" class="form-control" id="celular" placeholder="Celular" th:field="*{cel}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="telefono">Teléfono: </label>
+                                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" th:field="*{tel}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <label for="buscar_ciudad">Buscar Ciudad: </label>
+                                        <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad" th:placeholder="${inf}"/>
+                                        <label style="color: blue;">Ingresa las primeras tres iniciales de la ciudad para ver una lista</label>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label>Dirección: </label>
+                                        <input th:field="*{direccion}" class="form-control" placeholder="Dirección" required>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label>Observaciones: </label>
+                                        <textarea th:field="*{obs}" class="form-control" rows="3" required></textarea>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="ingresar_ciudad" name="ingresar_ciudad" th:field="*{ciudad}" required />
+
+                                <button class="btn btn-primary" type="submit" style="margin-left: 2px;">Enviar</button> <a class="btn btn-danger" th:href="@{/clientes/ver_clientes}">Cancelar</a>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- /.content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        
+
+
+        <div th:replace="layout/layout :: logout"></div>
+        <a th:replace="layout/layout :: scroll"></a>
+        <footer th:replace="layout/layout :: footer"></footer>
+        <script th:replace="clientes/js/autocomplete-ciudad :: javascript"></script>
+
+    </body>
+
+</html>

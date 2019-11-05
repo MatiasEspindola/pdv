@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head th:replace="layout/layout :: head"></head>
+
+    <body id="page-top">
+
+        <nav th:replace="layout/layout :: nav"></nav>
+
+        <div id="wrapper">
+
+            <ul th:replace="layout/layout :: sidebar"></ul>
+
+            <div id="content-wrapper">
+
+                <div class="container-fluid">
+
+                    <!-- Breadcrumbs-->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/productos/ver_productos}">Productos</a>
+                        </li>
+                        <li class="breadcrumb-item active">Ver Productos</li>
+                    </ol>
+
+                    <!-- Ver Clientes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area"></i>
+                            Lista de Productos</div>
+                        <div class="card-body">
+                            <table id="tabla" class="table table-hover table-responsive-xl table-bordered" style="width:100%">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="producto : ${productos}">
+                                        <td th:text="${producto.nombre}"></td>
+                                        <td th:text="${producto.precio}"></td>
+                                        <td th:text="${producto.stock}"></td>
+                                        <td>
+                                            <a class="btn btn-primary" ><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
+                                            <a class="btn btn-warning" th:href="@{/productos/editar/} + ${producto.id}"><i class="fas fa-user-edit" style="color: white; font-size: 15px;"></i></a>
+                                            <a class="btn btn-danger" th:href="@{/productos/borrar/} + ${producto.id}"><i class="fas fa-user-minus" style="color: white; font-size: 15px;"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <br>
+                            <a class="btn btn-success" th:href="@{/productos/registrar}"><i class="fas fa-user-plus" style="color:white; font-size: 15px;"></i> Registrar Producto</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Bar Chart Example</div>
+                                <div class="card-body">
+                                    <canvas id="myBarChart" width="100%" height="50"></canvas>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-pie"></i>
+                                    Pie Chart Example</div>
+                                <div class="card-body">
+                                    <canvas id="myPieChart" width="100%" height="100"></canvas>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /.container-fluid -->
+
+
+
+            </div>
+            <!-- /.content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <div th:replace="layout/layout :: logout"></div>
+        <a th:replace="layout/layout :: scroll"></a>
+        <footer th:replace="layout/layout :: footer"></footer>
+
+    </body>
+
+</html>
