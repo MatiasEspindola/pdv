@@ -33,12 +33,14 @@
                                   th:action="@{/productos/registrar}"
                                   th:object="${producto}" method="post" enctype="multipart/form-data"> 
                                 <div class="form-row">
-                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-12 col-xl-12" th:if="${editar}">
-                                            <label th:if="${editar}">Imagen: </label> <br th:if="${editar}">
-                                            <img th:src="@{'/uploads/productos/' + ${producto.foto}}"
-                                                 th:if="${editar}" style="max-width: 25%" class="img-thumbnail rounded">
+                                    <div class="form-group">
+                                        <img class="img-thumbnail rounded float-left"
+					style="max-width: 25%;" th:src="@{'/productos/uploads/' + ${producto.foto}}"
+                                        th:alt="${producto.foto}" th:if="${editar} "/>
                                     </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">  
                                         <div class="custom-file">
                                             <label for="imagen" th:text="${inf_img}"></label>
                                             <input type="file" name="file" class="form-control-file" id="file">

@@ -43,13 +43,13 @@ public class Producto implements Serializable {
     private int stock;
     private String foto;
 
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date fecha_envasado;
-
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date fecha_vencimiento;
+//    @Temporal(TemporalType.DATE)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    private Date fecha_envasado;
+//
+//    @Temporal(TemporalType.DATE)
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    private Date fecha_vencimiento;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_prov", referencedColumnName = "pk_id_prov")
@@ -151,20 +151,20 @@ public class Producto implements Serializable {
         this.foto = foto;
     }
 
-    public Date getFecha_envasado() {
-        return fecha_envasado;
-    }
-
-    public void setFecha_envasado(Date fecha_envasado) {
-        this.fecha_envasado = fecha_envasado;
-    }
-
-    public Date getFecha_vencimiento() {
-        return fecha_vencimiento;
-    }
-
-    public void setFecha_vencimiento(Date fecha_vencimiento) {
-        this.fecha_vencimiento = fecha_vencimiento;
-    }
+//    public Date getFecha_envasado() {
+//        return fecha_envasado;
+//    }
+//
+//    public void setFecha_envasado(Date fecha_envasado) {
+//        this.fecha_envasado = fecha_envasado;
+//    }
+//
+//    public Date getFecha_vencimiento() {
+//        return fecha_vencimiento;
+//    }
+//
+//    public void setFecha_vencimiento(Date fecha_vencimiento) {
+//        this.fecha_vencimiento = fecha_vencimiento;
+//    }
 
 }

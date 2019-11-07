@@ -9,7 +9,9 @@ import com.analistas.pdv.model.entity.Ciudad;
 import com.analistas.pdv.model.entity.Proveedor;
 import com.analistas.pdv.model.service.Ciudad_Service_Impl;
 import com.analistas.pdv.model.service.IProveedor_Service;
+import com.analistas.pdv.model.service.IUploadFile_Service;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +20,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.validation.Valid;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,12 +45,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/proveedores")
 public class proveedoresController {
 
+    private final org.slf4j.Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private IUploadFile_Service upl;
+
     @Autowired
     private IProveedor_Service proveedorServ;
-    
+
     @Autowired
     private Ciudad_Service_Impl ciudadServ;
-    
+
     private static boolean editar;
 
     @GetMapping("/ver_proveedores")
@@ -56,27 +67,45 @@ public class proveedoresController {
         m.put("proveedores", proveedores);
         return "proveedores/ver_proveedores";
     }
-    
+
     @GetMapping(value = "/cargar_ciudad/{term}", produces = {"application/json"})
     public @ResponseBody
     List<Ciudad> cargarCiudadProveedor(@PathVariable String term) {
         return ciudadServ.buscarPorNombre(term);
     }
 
-    // VER FOTO
-    /* @GetMapping(value="/ver/{id}")
-     public String ver(@PathVariable(value="id") int id, Map<String, Object> model){
-     Proveedor proveedor = proveedorServ.findById(id);
-        
-     model.put("proveedor", proveedor);
-     model.put("imagen", "Detalle proveedor: " + proveedor.getNombre());
-     return "ver";
-     } */
+    @GetMapping(value = "/uploads/{filename:.+}")
+    public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+
+        Resource recurso = null;
+
+        try {
+            recurso = upl.load(filename);
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                .body(recurso);
+    }
+
+    @GetMapping("/detalles/{id}")
+    public String detalles_cliente(Map m, @PathVariable(value = "id") int id) {
+
+        Proveedor proveedor = proveedorServ.findById(id);
+
+        m.put("titulo", "Detalles");
+        m.put("proveedor", proveedor);
+        return "proveedor/detalles";
+    }
+
     @GetMapping(value = "/registrar")
     public String registrar(Map m) {
-        
+
         editar = false;
-        
+
         m.put("editar", editar);
 
         Proveedor proveedor = new Proveedor();
@@ -98,9 +127,9 @@ public class proveedoresController {
             if (proveedor == null) {
                 return "redirect:/proveedores/ver_proveedores";
             }
-            
+
             editar = true;
-            
+
             m.put("editar", editar);
             m.put("inf", proveedor.getCiudad().getCp() + ", " + proveedor.getCiudad().getCiudad() + ", " + proveedor.getCiudad().getProvincia().getProvincia());
             m.put("inf_img", "Cambiar Imagen: ");
@@ -116,23 +145,22 @@ public class proveedoresController {
 
     @PostMapping("/registrar")
     public String guardar(@Valid Proveedor proveedor, Map m, @RequestParam("file") MultipartFile foto) {
-        if (!foto.isEmpty()) {
-            Path directorioRecursos = Paths.get("src//main/resources//static/uploads/proveedores");
-            String rootPath = directorioRecursos.toFile().getAbsolutePath();
-            try {
-                byte[] bytes = foto.getBytes();
-                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-                if (!Files.exists(directorioRecursos)) {
-                    Files.createDirectories(directorioRecursos);
-                } else {
-                    Files.write(rutaCompleta, bytes);
-                }
-                //mensaje
 
-                proveedor.setFoto(foto.getOriginalFilename());
-            } catch (IOException ex) {
-                Logger.getLogger(clientesController.class.getName()).log(Level.SEVERE, null, ex);
+        if (!foto.isEmpty()) {
+            if (proveedor.getId() > 0 && proveedor.getFoto() != null
+                    && proveedor.getFoto().length() > 0) {
+                upl.delete(proveedor.getFoto());
             }
+            String uniqueFilename = null;
+
+            try {
+                uniqueFilename = upl.copy(foto);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            proveedor.setFoto(uniqueFilename);
         } else {
             //mensaje
         }

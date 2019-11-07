@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionAttributes("cliente")
@@ -40,6 +41,8 @@ public class clientesController {
     @Autowired
     private TipoDocumento_Service_Impl tipodocumentoServ;
 
+    private static boolean editar;
+
     @GetMapping("/ver_clientes")
     public String clientes(Map m) {
 
@@ -48,6 +51,16 @@ public class clientesController {
         m.put("titulo", "Ver Clientes");
         m.put("clientes", clientes);
         return "clientes/ver_clientes";
+    }
+
+    @GetMapping("/detalles/{id}")
+    public String detalles_cliente(Map m, @PathVariable(value = "id") int id) {
+
+        Cliente cliente = clienteServ.findById(id);
+
+        m.put("titulo", "Detalles");
+        m.put("cliente", cliente);
+        return "clientes/detalles";
     }
 
     @GetMapping(value = "/cargar_ciudad/{term}", produces = {"application/json"})
@@ -65,6 +78,8 @@ public class clientesController {
 
         String inf = "Buscar Ciudad";
 
+        editar = false;
+
         m.put("inf", inf);
         m.put("titulo", "Registrar Cliente");
         m.put("cliente", cliente);
@@ -78,11 +93,14 @@ public class clientesController {
 
         List<Tipodocumento> tiposdocumentos = tipodocumentoServ.findAll();
 
+        editar = true;
+
         if (id > 0) {
             cliente = clienteServ.findById(id);
             if (cliente == null) {
                 return "redirect:/clientes/ver_clientes";
             }
+
             String inf = cliente.getCiudad().getCp() + ", " + cliente.getCiudad().getCiudad() + ", " + cliente.getCiudad().getProvincia().getProvincia();
 
             m.put("inf", inf);
@@ -97,17 +115,36 @@ public class clientesController {
     }
 
     @PostMapping("/registrar")
-    public String guardar(@Valid Cliente cliente, Map m) {
+    public String guardar(@Valid Cliente cliente, Map m, RedirectAttributes flash) {
+
+        List<Cliente> clientes = clienteServ.findAll();
+
+        for (int i = 0; i < clientes.size(); i++) {
+            if (cliente.getDoc().equals(clientes.get(i).getDoc()) && editar == false) {
+                flash.addFlashAttribute("existente", "¡El cliente con el dni " + cliente.getDoc()+ " ya existe!");
+                return "redirect:/clientes/ver_clientes";
+            }
+        }
+
+        if (editar) {
+            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
+        } else {
+            flash.addFlashAttribute("nuevo", "¡Cliente agregado con éxito!");
+        }
+
         clienteServ.save(cliente);
+
         return "redirect:/clientes/ver_clientes";
     }
 
     @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id) {
+    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes flash) {
 
         if (id > 0) {
             Cliente cliente = clienteServ.findById(id);
             clienteServ.delete(cliente);
+
+            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
         }
 
         return "redirect:/clientes/ver_clientes";

@@ -24,8 +24,11 @@ and open the template in the editor.
         <!-- Custom styles for this template-->
         <link href="/css/sb-admin.css" rel="stylesheet">
         <link href="/css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-        
+
+        <link href="/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+
         <link href="/css/sweetalert2.min.css" rel="stylesheet" type="text/css"/>
+
 
     </head>
     <body>
@@ -164,7 +167,8 @@ and open the template in the editor.
         </div>
 
         <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top" th:fragment="scroll">
+        <a class="scroll-to-top rounded" href="#page-top" th:fragment="scroll"
+           style="z-index: 3;">
             <i class="fas fa-angle-up"></i>
         </a>
 
@@ -196,16 +200,22 @@ and open the template in the editor.
             <script src="/js/sweetalert2.all.min.js" type="text/javascript"></script>
 
             <script>
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                        $(this).remove();
+                    });
+                }, 8000);
+
                 $(document).ready(function () {
                     $('#tabla').DataTable({
-                            "language": {
+                        "language": {
                             "lengthMenu": "Mostrar _MENU_ registros por páginas",
                             "zeroRecords": "No se han encontrado resultados",
                             "info": "Mostrando resultado _PAGE_ de _PAGES_",
                             "infoEmpty": "No hay registros disponibles",
                             "infoFiltered": "(Filtrado de _MAX_ registros totales)",
                             "loadingRecords": "Cargando...",
-                            "processing":     "Procesando...",
+                            "processing": "Procesando...",
                             "search": "Buscar:",
                             "paginate": {
                                 "first": "Primer página",
@@ -214,7 +224,7 @@ and open the template in the editor.
                                 "next": "Siguiente"
                             },
                             "aria": {
-                                "sortAscending":  ": activar para ordenar la columna ascendente",
+                                "sortAscending": ": activar para ordenar la columna ascendente",
                                 "sortDescending": ": activar para ordenar la columna descendente"
                             }
                         }

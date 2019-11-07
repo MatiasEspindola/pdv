@@ -56,6 +56,16 @@ public class comprasController {
     List<Producto> cargarProducto(@PathVariable String term) {
         return productoServ.buscarPorNombre(term);
     }
+    
+    @GetMapping("/detalles/{id}")
+    public String detalles_compra(Map m, @PathVariable(value = "id") int id) {
+
+        Compra compra = compraServ.findById(id);
+
+        m.put("titulo", "Detalles");
+        m.put("compra", compra);
+        return "compras/detalles";
+    }
 
     //CRUD
     @GetMapping("/registrar")

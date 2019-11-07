@@ -22,8 +22,8 @@ CREATE TABLE productos(
     nombre varchar(25) not null,
 	precio double not null,
     foto varchar(255),
-    fecha_envasado date not null,
-    fecha_vencimiento date not null,
+  --  fecha_envasado date not null,
+  --  fecha_vencimiento date not null,
     stock int not null
 );
 

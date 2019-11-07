@@ -15,16 +15,23 @@ import com.analistas.pdv.model.service.IMarca_Service;
 import com.analistas.pdv.model.service.IMetodoPago_Service;
 import com.analistas.pdv.model.service.IProducto_Service;
 import com.analistas.pdv.model.service.IProveedor_Service;
+import com.analistas.pdv.model.service.IUploadFile_Service;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +47,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/productos")
 public class productosController {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private IProducto_Service productoServ;
 
@@ -54,6 +63,9 @@ public class productosController {
 
     @Autowired
     private IMetodoPago_Service metodopagoServ;
+
+    @Autowired
+    private IUploadFile_Service upl;
 
     private static boolean editar;
 
@@ -86,6 +98,33 @@ public class productosController {
         return proveedorServ.buscarPorNombre(term);
     }
 
+    @GetMapping(value = "/uploads/{filename:.+}")
+    public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+
+        Resource recurso = null;
+
+        try {
+            recurso = upl.load(filename);
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                .body(recurso);
+    }
+
+    @GetMapping("/detalles/{id}")
+    public String detalles_producto(Map m, @PathVariable(value = "id") int id) {
+
+        Producto producto = productoServ.findById(id);
+
+        m.put("titulo", "Detalles");
+        m.put("producto", producto);
+        return "productos/detalles";
+    }
+
     //CRUD
     @GetMapping("/registrar")
     public String registrar(Map m) {
@@ -96,7 +135,6 @@ public class productosController {
 
         List<Metodo_De_Pago> metodosdepago = metodopagoServ.findAll();
         Producto producto = new Producto();
-
 
         m.put("inf1", "Buscar Proveedor");
         m.put("inf2", "Buscar Categoria");
@@ -117,9 +155,9 @@ public class productosController {
             if (producto == null) {
                 return "redirect:/clientes/ver_clientes";
             }
-            
+
             editar = true;
-            
+
             m.put("editar", editar);
             m.put("inf1", producto.getProveedor().getNombre());
             m.put("inf2", producto.getCategoria().getCategoria());
@@ -139,22 +177,20 @@ public class productosController {
     public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto) {
 
         if (!foto.isEmpty()) {
-            Path directorioRecursos = Paths.get("src//main/resources//static/uploads/productos");
-            String rootPath = directorioRecursos.toFile().getAbsolutePath();
-            try {
-                byte[] bytes = foto.getBytes();
-                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-                if (!Files.exists(directorioRecursos)) {
-                    Files.createDirectories(directorioRecursos);
-                } else {
-                    Files.write(rutaCompleta, bytes);
-                }
-                //mensaje
-
-                producto.setFoto(foto.getOriginalFilename());
-            } catch (IOException ex) {
-                Logger.getLogger(productosController.class.getName()).log(Level.SEVERE, null, ex);
+            if (producto.getId() > 0 && producto.getFoto() != null
+                    && producto.getFoto().length() > 0) {
+                upl.delete(producto.getFoto());
             }
+            String uniqueFilename = null;
+
+            try {
+                uniqueFilename = upl.copy(foto);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            producto.setFoto(uniqueFilename);
         } else {
             //mensaje
         }

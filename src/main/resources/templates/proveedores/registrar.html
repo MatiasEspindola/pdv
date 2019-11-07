@@ -33,11 +33,13 @@
                                   th:action="@{/proveedores/registrar}"
                                   th:object="${proveedor}" method="post" enctype="multipart/form-data"> 
                                 <div class="form-row">
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-12 col-xl-12" th:if="${editar}">
-                                            <label th:if="${editar}">Imagen: </label> <br th:if="${editar}">
-                                            <img th:src="@{'/uploads/proveedores/' + ${proveedor.foto}}"
-                                                 th:if="${editar}" style="max-width: 25%" class="img-thumbnail rounded"> 
+                                    <div class="form-group">
+                                        <img class="img-thumbnail rounded float-left"
+					style="max-width: 25%;" th:src="@{'/proveedores/uploads/' + ${proveedor.foto}}"
+                                        th:alt="${proveedor.foto}" th:if="${editar} "/>
                                     </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <div class="custom-file">
                                             <label for="imagen" th:text="${inf_img}"></label>
@@ -67,7 +69,7 @@
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                         <label for="buscar_ciudad">Buscar Ciudad: </label>
                                         <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad" th:placeholder="${inf}"/>
-                                        <label style="color: blue;">Ingresa las primeras tres iniciales de la ciudad para ver una lista</label>
+                                        
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <label>Dirección: </label>

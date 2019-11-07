@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head th:replace="layout/layout :: head"></head>
+
+    <body id="page-top">
+
+        <nav th:replace="layout/layout :: nav"></nav>
+
+        <div id="wrapper">
+
+            <ul th:replace="layout/layout :: sidebar"></ul>
+
+            <div id="content-wrapper">
+
+                <div class="container-fluid">
+
+                    <!-- Breadcrumbs-->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/compras/ver_compras}">Compras</a>
+                        </li>
+                        <li class="breadcrumb-item active">Detalles</li>
+                    </ol>
+
+                    <!-- Ver Clientes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area"></i>
+                            Ver Detalles</div>
+                        <div class="card-body">
+                            
+                         
+                            
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Bar Chart Example</div>
+                                <div class="card-body">
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-pie"></i>
+                                    Pie Chart Example</div>
+                                <div class="card-body">
+                                   
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /.container-fluid -->
+
+
+
+            </div>
+            <!-- /.content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <div th:replace="layout/layout :: logout"></div>
+        <a th:replace="layout/layout :: scroll"></a>
+        <footer th:replace="layout/layout :: footer"></footer>
+    </body>
+
+</html>

@@ -29,7 +29,7 @@
                             <i class="fas fa-chart-area"></i>
                             Lista de Proveedores</div>
                         <div class="card-body">
-                            <table id="tabla" class="table table-hover table-responsive-xl table-bordered" style="width:100%">
+                            <table id="tabla" class="table table-hover  text-center table-responsive-xl table-bordered" style="width:100%">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>Nombre</th>
@@ -46,7 +46,7 @@
                                         <td th:text="${proveedor.tel}"></td>
                                         <td th:text="${proveedor.ciudad}"></td>
                                         <td>
-                                            <a class="btn btn-primary" ><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
+                                            <a class="btn btn-primary" th:href="@{/proveedores/detalles/} + ${proveedor.id}"><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
                                             <a class="btn btn-warning" th:href="@{/proveedores/editar/} + ${proveedor.id}"><i class="fas fa-user-edit" style="color: white; font-size: 15px;"></i></a>
                                             <a class="btn btn-danger" th:href="@{/proveedores/borrar/} + ${proveedor.id}"><i class="fas fa-user-minus" style="color: white; font-size: 15px;"></i></a>
                                         </td>
@@ -74,7 +74,7 @@
                                     <i class="fas fa-chart-bar"></i>
                                     Bar Chart Example</div>
                                 <div class="card-body">
-                                    <canvas id="myBarChart" width="100%" height="50"></canvas>
+                                    
                                 </div>
 
                             </div>
@@ -85,7 +85,7 @@
                                     <i class="fas fa-chart-pie"></i>
                                     Pie Chart Example</div>
                                 <div class="card-body">
-                                    <canvas id="myPieChart" width="100%" height="100"></canvas>
+                                   
                                 </div>
 
                             </div>

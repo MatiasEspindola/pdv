@@ -29,12 +29,14 @@
                             <i class="fas fa-chart-area"></i>
                             Lista de Productos</div>
                         <div class="card-body">
-                            <table id="tabla" class="table table-hover table-responsive-xl table-bordered" style="width:100%">
+                            <table id="tabla" class="table text-center table-hover table-responsive-xl table-bordered display" style="width:100%">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>Producto</th>
                                         <th>Precio</th>
                                         <th>Stock</th>
+                                        <th>Marca</th>
+                                        <th>Categoria</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -43,8 +45,10 @@
                                         <td th:text="${producto.nombre}"></td>
                                         <td th:text="${producto.precio}"></td>
                                         <td th:text="${producto.stock}"></td>
+                                        <td th:text="${producto.marca.marca}"></td>
+                                        <td th:text="${producto.categoria.categoria}"></td>
                                         <td>
-                                            <a class="btn btn-primary" ><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
+                                            <a class="btn btn-primary" th:href="@{/productos/detalles/} + ${producto.id}"><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
                                             <a class="btn btn-warning" th:href="@{/productos/editar/} + ${producto.id}"><i class="fas fa-user-edit" style="color: white; font-size: 15px;"></i></a>
                                             <a class="btn btn-danger" th:href="@{/productos/borrar/} + ${producto.id}"><i class="fas fa-user-minus" style="color: white; font-size: 15px;"></i></a>
                                         </td>
@@ -55,6 +59,8 @@
                                         <th>Producto</th>
                                         <th>Precio</th>
                                         <th>Stock</th>
+                                        <th>Marca</th>
+                                        <th>Categoria</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </tfoot>
@@ -71,7 +77,7 @@
                                     <i class="fas fa-chart-bar"></i>
                                     Bar Chart Example</div>
                                 <div class="card-body">
-                                    <canvas id="myBarChart" width="100%" height="50"></canvas>
+                                    
                                 </div>
 
                             </div>
@@ -82,7 +88,7 @@
                                     <i class="fas fa-chart-pie"></i>
                                     Pie Chart Example</div>
                                 <div class="card-body">
-                                    <canvas id="myPieChart" width="100%" height="100"></canvas>
+                                   
                                 </div>
 
                             </div>
