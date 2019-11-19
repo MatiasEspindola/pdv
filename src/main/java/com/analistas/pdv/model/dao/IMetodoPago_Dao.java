@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.dao;
 
-import com.analistas.pdv.model.entity.Metodo_De_Pago;
+import com.analistas.pdv.model.entities.Metodo_De_Pago;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

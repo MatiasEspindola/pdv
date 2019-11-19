@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.dao;
 
-import com.analistas.pdv.model.entity.Proveedor;
+import com.analistas.pdv.model.entities.Proveedor;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

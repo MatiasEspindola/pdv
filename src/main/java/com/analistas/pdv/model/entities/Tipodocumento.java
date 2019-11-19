@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,20 +24,20 @@ import javax.persistence.Table;
  * @author matia
  */
 @Entity
-@Table(name = "provincias")
-public class Provincia {
+@Table(name = "tipos_documentos")
+public class Tipodocumento implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_id_prov")
+    @Column(name = "pk_id_tipo")
     private int id;
 
-    @Column(name = "provincia")
-    private String provincia;
+    private String tipo;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "provincia")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tipo")
+    @JsonManagedReference
     @JsonIgnore
-    private List<Ciudad> ciudades;
+    private List<Cliente> clientes;
 
     public int getId() {
         return id;
@@ -46,28 +47,20 @@ public class Provincia {
         this.id = id;
     }
 
-    public String getProvincia() {
-        return provincia;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    public List<Ciudad> getCiudades() {
-        return ciudades;
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 
-    public void setCiudades(List<Ciudad> ciudades) {
-        this.ciudades = ciudades;
-    }
-
-    public static String ucFirst(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        } else {
-            return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
-        }
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
 }

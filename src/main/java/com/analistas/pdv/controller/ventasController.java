@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 package com.analistas.pdv.controller;
-import com.analistas.pdv.model.entity.Compra;
-import com.analistas.pdv.model.entity.Metodo_De_Pago;
-import com.analistas.pdv.model.entity.Producto;
-import com.analistas.pdv.model.entity.Venta;
+import com.analistas.pdv.model.entities.Compra;
+import com.analistas.pdv.model.entities.Metodo_De_Pago;
+import com.analistas.pdv.model.entities.Producto;
+import com.analistas.pdv.model.entities.Venta;
 import com.analistas.pdv.model.service.MetodoPago_Service_Impl;
 import com.analistas.pdv.model.service.Producto_Service_Impl;
 import com.analistas.pdv.model.service.Venta_Service_Impl;

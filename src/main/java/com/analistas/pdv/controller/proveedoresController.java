@@ -5,8 +5,8 @@
  */
 package com.analistas.pdv.controller;
 
-import com.analistas.pdv.model.entity.Ciudad;
-import com.analistas.pdv.model.entity.Proveedor;
+import com.analistas.pdv.model.entities.Ciudad;
+import com.analistas.pdv.model.entities.Proveedor;
 import com.analistas.pdv.model.service.Ciudad_Service_Impl;
 import com.analistas.pdv.model.service.IProveedor_Service;
 import com.analistas.pdv.model.service.IUploadFile_Service;
@@ -57,6 +57,7 @@ public class proveedoresController {
     private Ciudad_Service_Impl ciudadServ;
 
     private static boolean editar;
+    private static boolean tel;
 
     @GetMapping("/ver_proveedores")
     public String proveedores(Map m) {
@@ -92,13 +93,16 @@ public class proveedoresController {
     }
 
     @GetMapping("/detalles/{id}")
-    public String detalles_cliente(Map m, @PathVariable(value = "id") int id) {
+    public String detalles_proveedor(Map m, @PathVariable(value = "id") int id) {
 
         Proveedor proveedor = proveedorServ.findById(id);
 
         m.put("titulo", "Detalles");
         m.put("proveedor", proveedor);
-        return "proveedor/detalles";
+
+       
+
+        return "proveedores/detalles";
     }
 
     @GetMapping(value = "/registrar")
@@ -161,9 +165,7 @@ public class proveedoresController {
             }
 
             proveedor.setFoto(uniqueFilename);
-        } else {
-            //mensaje
-        }
+        } 
 
         proveedorServ.save(proveedor);
         return "redirect:/proveedores/ver_proveedores";

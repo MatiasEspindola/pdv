@@ -1,8 +1,8 @@
 package com.analistas.pdv.controller;
 
-import com.analistas.pdv.model.entity.Ciudad;
-import com.analistas.pdv.model.entity.Cliente;
-import com.analistas.pdv.model.entity.Tipodocumento;
+import com.analistas.pdv.model.entities.Ciudad;
+import com.analistas.pdv.model.entities.Cliente;
+import com.analistas.pdv.model.entities.Tipodocumento;
 import com.analistas.pdv.model.service.Ciudad_Service_Impl;
 import com.analistas.pdv.model.service.Cliente_Service_Impl;
 import com.analistas.pdv.model.service.TipoDocumento_Service_Impl;

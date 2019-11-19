@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.service;
 
-import com.analistas.pdv.model.entity.Metodo_De_Pago;
+import com.analistas.pdv.model.entities.Metodo_De_Pago;
 import java.util.List;
 
 /**

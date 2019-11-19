@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,20 +24,19 @@ import javax.persistence.Table;
  * @author matia
  */
 @Entity
-@Table(name = "tipos_documentos")
-public class Tipodocumento implements Serializable {
+@Table(name = "categorias")
+public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_id_tipo")
+    @Column(name = "pk_id_cat")
     private int id;
 
-    private String tipo;
+    private String categoria;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tipo")
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "categoria")
     @JsonIgnore
-    private List<Cliente> clientes;
+    private List<Producto> productos;
 
     public int getId() {
         return id;
@@ -47,20 +46,25 @@ public class Tipodocumento implements Serializable {
         this.id = id;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
+    @Override
+    public String toString() {
+        return categoria;
     }
 
 }

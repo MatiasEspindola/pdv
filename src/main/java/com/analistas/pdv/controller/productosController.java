@@ -5,22 +5,26 @@
  */
 package com.analistas.pdv.controller;
 
-import com.analistas.pdv.model.entity.Categoria;
-import com.analistas.pdv.model.entity.Marca;
-import com.analistas.pdv.model.entity.Metodo_De_Pago;
-import com.analistas.pdv.model.entity.Producto;
-import com.analistas.pdv.model.entity.Proveedor;
+import com.analistas.pdv.model.entities.Categoria;
+import com.analistas.pdv.model.entities.Compra;
+import com.analistas.pdv.model.entities.Marca;
+import com.analistas.pdv.model.entities.Metodo_De_Pago;
+import com.analistas.pdv.model.entities.Producto;
+import com.analistas.pdv.model.entities.Proveedor;
+import com.analistas.pdv.model.service.Compra_Service_Impl;
 import com.analistas.pdv.model.service.ICategoria_Service;
 import com.analistas.pdv.model.service.IMarca_Service;
 import com.analistas.pdv.model.service.IMetodoPago_Service;
 import com.analistas.pdv.model.service.IProducto_Service;
 import com.analistas.pdv.model.service.IProveedor_Service;
 import com.analistas.pdv.model.service.IUploadFile_Service;
+import com.analistas.pdv.model.service.MetodoPago_Service_Impl;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -68,6 +73,12 @@ public class productosController {
     private IUploadFile_Service upl;
 
     private static boolean editar;
+
+    @Autowired
+    private MetodoPago_Service_Impl metododepagoServ;
+    
+    @Autowired
+    private Compra_Service_Impl compraServ;
 
     @GetMapping("/ver_productos")
     public String productos(Map m) {
@@ -174,7 +185,10 @@ public class productosController {
     }
 
     @PostMapping("/registrar")
-    public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto) {
+    public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto,
+            @RequestParam("fechaCompra") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaCompra, @RequestParam("fechaEntrega") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaEntrega,
+            @RequestParam("cantidad") int cantidad, @RequestParam("montoEnvio") double monto,
+            @RequestParam("metodoPago") int metodoPago, @RequestParam("descripcion") String descripcion) {
 
         if (!foto.isEmpty()) {
             if (producto.getId() > 0 && producto.getFoto() != null
@@ -191,11 +205,32 @@ public class productosController {
             }
 
             producto.setFoto(uniqueFilename);
-        } else {
-            //mensaje
+        }
+
+        Compra compra = new Compra();
+        
+        compra.setCantidad(cantidad);
+        compra.setFechaCompra(fechaCompra);
+        compra.setFechaEntrega(fechaEntrega);
+        compra.setMonto_envio(monto);
+        compra.setMetodo_de_pago(metodopagoServ.findById(metodoPago));
+        compra.setDescripcion(descripcion);
+        compra.setSubtotal(producto.getPrecio());
+        compra.setTotal(compra.getSubtotal() + compra.getMonto_envio());
+        compra.setProducto(producto);
+
+        producto.setStock(cantidad);
+        
+        compra.setDemorado(false);
+        
+        if(fechaEntrega.after(fechaCompra)){
+            compra.setEn_camino(true);
+        }else{
+            compra.setEn_camino(false);
         }
 
         productoServ.save(producto);
+        compraServ.save(compra);
         return "redirect:/productos/ver_productos";
     }
 

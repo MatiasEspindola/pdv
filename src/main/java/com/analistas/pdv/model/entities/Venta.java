@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -47,13 +47,6 @@ public class Venta implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fecha;
-
-    private LocalTime hora;
-
-    private boolean en_camino;
-    private boolean demorado;
-    private boolean entregado;
-    private boolean perdida;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_producto", referencedColumnName = "pk_id_prod")
@@ -129,46 +122,6 @@ public class Venta implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
-    }
-
-    public boolean isEn_camino() {
-        return en_camino;
-    }
-
-    public void setEn_camino(boolean en_camino) {
-        this.en_camino = en_camino;
-    }
-
-    public boolean isDemorado() {
-        return demorado;
-    }
-
-    public void setDemorado(boolean demorado) {
-        this.demorado = demorado;
-    }
-
-    public boolean isEntregado() {
-        return entregado;
-    }
-
-    public void setEntregado(boolean entregado) {
-        this.entregado = entregado;
-    }
-
-    public boolean isPerdida() {
-        return perdida;
-    }
-
-    public void setPerdida(boolean perdida) {
-        this.perdida = perdida;
     }
 
     public Cliente getCliente() {

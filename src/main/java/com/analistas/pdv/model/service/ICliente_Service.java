@@ -5,8 +5,8 @@
  */
 package com.analistas.pdv.model.service;
 
-import com.analistas.pdv.model.entity.Ciudad;
-import com.analistas.pdv.model.entity.Cliente;
+import com.analistas.pdv.model.entities.Ciudad;
+import com.analistas.pdv.model.entities.Cliente;
 import java.util.List;
 
 /**

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="layout/layout :: head"></head>
 
@@ -45,8 +45,8 @@
                                         <td th:text="${producto.nombre}"></td>
                                         <td th:text="${producto.precio}"></td>
                                         <td th:text="${producto.stock}"></td>
-                                        <td th:text="${producto.marca.marca}"></td>
-                                        <td th:text="${producto.categoria.categoria}"></td>
+                                        <td th:text="${producto.marca}"></td>
+                                        <td th:text="${producto.categoria}"></td>
                                         <td>
                                             <a class="btn btn-primary" th:href="@{/productos/detalles/} + ${producto.id}"><i class="fas fa-user" style="color: white; font-size: 15px;"></i></a>
                                             <a class="btn btn-warning" th:href="@{/productos/editar/} + ${producto.id}"><i class="fas fa-user-edit" style="color: white; font-size: 15px;"></i></a>
@@ -71,22 +71,22 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header">
                                     <i class="fas fa-chart-bar"></i>
-                                    Bar Chart Example</div>
+                                    Compras</div>
                                 <div class="card-body">
                                     
                                 </div>
 
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="card mb-3">
                                 <div class="card-header">
                                     <i class="fas fa-chart-pie"></i>
-                                    Pie Chart Example</div>
+                                    Ventas</div>
                                 <div class="card-body">
                                    
                                 </div>

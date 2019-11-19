@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
     <head th:replace="layout/layout :: head"></head>
 
@@ -18,7 +21,7 @@
                     <!-- Breadcrumbs-->
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a th:href="@{/productos/ver_productos}">Proveedores</a>
+                            <a th:href="@{/proveedores/ver_proveedores}">Proveedores</a>
                         </li>
                         <li class="breadcrumb-item active">Detalles</li>
                     </ol>
@@ -29,13 +32,31 @@
                             <i class="fas fa-chart-area"></i>
                             Ver Detalles</div>
                         <div class="card-body">
-                            
-                           <img class="img-thumbnail rounded float-left"
-					style="max-width: 25%;" th:src="@{'/proveedores/uploads/' + ${proveedor.foto}}"
-					th:alt="${proveedor.foto}" />
-                            
+
+                            <div class="row">
+                                <div class="col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 th:text="${proveedor.nombre}"></h5>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item"><h5 th:text="${proveedor.direccion}"></h5></li>
+                                            <li class="list-group-item"><h5 th:text="${proveedor.ciudad.ciudad}"></h5></li>
+                                            <li class="list-group-item"><h5 th:text="${proveedor.tel}"></h5></li>
+                                            <li class="list-group-item"><h5 th:text="${proveedor.cel}"></h5></li>
+                                            <li class="list-group-item"><h5 th:text="${proveedor.email}"></h5></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                    <img class="img-thumbnail rounded"
+                                         style="max-width: 100%;" th:src="@{'/proveedores/uploads/' + ${proveedor.foto}}"
+                                         th:alt="${proveedor.foto}" />
+                                </div>
+                            </div>
+
                         </div>
-                        
+
                     </div>
 
                     <div class="row">
@@ -43,9 +64,9 @@
                             <div class="card mb-3">
                                 <div class="card-header">
                                     <i class="fas fa-chart-bar"></i>
-                                    Bar Chart Example</div>
+                                    Productos</div>
                                 <div class="card-body">
-                                    
+
                                 </div>
 
                             </div>
@@ -56,7 +77,7 @@
                                     <i class="fas fa-chart-pie"></i>
                                     Pie Chart Example</div>
                                 <div class="card-body">
-                                   
+
                                 </div>
 
                             </div>

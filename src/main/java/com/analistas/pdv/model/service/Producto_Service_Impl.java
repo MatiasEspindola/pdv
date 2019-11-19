@@ -6,7 +6,7 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.dao.IProducto_Dao;
-import com.analistas.pdv.model.entity.Producto;
+import com.analistas.pdv.model.entities.Producto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

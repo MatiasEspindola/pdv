@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.service;
 
-import com.analistas.pdv.model.entity.Provincia;
+import com.analistas.pdv.model.entities.Provincia;
 import java.util.List;
 
 /**

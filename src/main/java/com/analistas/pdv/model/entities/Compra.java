@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -41,7 +41,11 @@ public class Compra implements Serializable {
     
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date fecha;
+    private Date fechaCompra;
+    
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date fechaEntrega;
     
     private Double monto_envio;
     private boolean en_camino;
@@ -107,12 +111,20 @@ public class Compra implements Serializable {
         this.producto = producto;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaCompra() {
+        return fechaCompra;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaCompra(Date fechaCompra) {
+        this.fechaCompra = fechaCompra;
+    }
+
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
     }
 
     public Double getMonto_envio() {

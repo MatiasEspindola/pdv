@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.dao;
 
-import com.analistas.pdv.model.entity.Compra;
+import com.analistas.pdv.model.entities.Compra;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -6,7 +6,7 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.dao.IProvincia_Dao;
-import com.analistas.pdv.model.entity.Provincia;
+import com.analistas.pdv.model.entities.Provincia;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

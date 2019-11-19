@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.dao;
 
-import com.analistas.pdv.model.entity.Ticket;
+import com.analistas.pdv.model.entities.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

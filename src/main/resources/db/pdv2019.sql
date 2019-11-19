@@ -20,11 +20,12 @@ CREATE TABLE usuarios(
 CREATE TABLE productos(
 	pk_id_prod int not null primary key auto_increment,
     nombre varchar(25) not null,
+    modelo varchar(55) not null,
 	precio double not null,
-    foto varchar(255),
+    foto varchar(255) not null,
   --  fecha_envasado date not null,
   --  fecha_vencimiento date not null,
-    stock int not null
+    stock int null
 );
 
 CREATE TABLE metodos_de_pagos(
@@ -39,7 +40,8 @@ CREATE TABLE compras(
     total double not null,
     cantidad int not null,
     descripcion varchar(50) not null,
-	fecha date not null,
+	fechaCompra date not null,
+    fechaEntrega date not null,
     monto_envio double not null,
     en_camino boolean,
     demorado boolean,
@@ -61,13 +63,13 @@ CREATE TABLE proveedores(
     tel varchar(20) not null,
     cel varchar(20) not null,
     email varchar(55) not null,
-    foto varchar(255)
+    foto varchar(255) not null
 );
 
 CREATE TABLE ciudades(
 	pk_id_ciu int not null primary key auto_increment,
     ciudad varchar(60) not null,
-    cp int
+    cp int not null
 );
 
 CREATE TABLE provincias(
@@ -77,15 +79,11 @@ CREATE TABLE provincias(
 
 CREATE TABLE ventas(
 	pk_id_ven int not null primary key auto_increment,
-    descripcion varchar(50),
+    descripcion varchar(50) not null,
     descu double not null,
 	monto double not null,
     cantidad int not null,
     fecha date not null,
-    hora datetime not null,
-    en_camino boolean,
-    demorado boolean,
-    entregado boolean,
     perdida boolean
 );
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,6 +39,7 @@ public class Producto implements Serializable {
     @Column(name = "pk_id_prod")
     private int id;
     private String nombre;
+    private String modelo;
     private Double precio;
     private int stock;
     private String foto;
@@ -50,7 +51,6 @@ public class Producto implements Serializable {
 //    @Temporal(TemporalType.DATE)
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
 //    private Date fecha_vencimiento;
-
     @ManyToOne
     @JoinColumn(name = "fk_id_prov", referencedColumnName = "pk_id_prov")
     private Proveedor proveedor;
@@ -166,5 +166,12 @@ public class Producto implements Serializable {
 //    public void setFecha_vencimiento(Date fecha_vencimiento) {
 //        this.fecha_vencimiento = fecha_vencimiento;
 //    }
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
 
 }

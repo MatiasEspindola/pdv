@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.service;
 
-import com.analistas.pdv.model.entity.Tipodocumento;
+import com.analistas.pdv.model.entities.Tipodocumento;
 import java.util.List;
 
 /**

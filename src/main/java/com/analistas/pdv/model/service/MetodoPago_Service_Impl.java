@@ -6,7 +6,7 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.dao.IMetodoPago_Dao;
-import com.analistas.pdv.model.entity.Metodo_De_Pago;
+import com.analistas.pdv.model.entities.Metodo_De_Pago;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

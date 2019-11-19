@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -21,30 +21,28 @@ import javax.persistence.Table;
 
 /**
  *
- * @author nahuel
+ * @author matia
  */
 @Entity
-@Table(name = "usuarios")
-public class Usuario implements Serializable {
+@Table(name = "metodos_de_pagos")
+public class Metodo_De_Pago implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_id_us")
+    @Column(name = "pk_id_mdp")
     private int id;
 
-    private String us;
-    private String ps;
+    private String metodo;
+
     private boolean hab;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago")
     @JsonIgnore
     private List<Venta> ventas;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago")
     @JsonIgnore
-    private List<Rol> roles;
+    private List<Compra> compras;
 
     public int getId() {
         return id;
@@ -54,20 +52,12 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getUs() {
-        return us;
+    public String getMetodo() {
+        return metodo;
     }
 
-    public void setUs(String us) {
-        this.us = us;
-    }
-
-    public String getPs() {
-        return ps;
-    }
-
-    public void setPs(String ps) {
-        this.ps = ps;
+    public void setMetodo(String metodo) {
+        this.metodo = metodo;
     }
 
     public boolean isHab() {
@@ -86,12 +76,12 @@ public class Usuario implements Serializable {
         this.ventas = ventas;
     }
 
-    public List<Rol> getRoles() {
-        return roles;
+    public List<Compra> getCompras() {
+        return compras;
     }
 
-    public void setRoles(List<Rol> roles) {
-        this.roles = roles;
+    public void setCompras(List<Compra> compras) {
+        this.compras = compras;
     }
 
 }

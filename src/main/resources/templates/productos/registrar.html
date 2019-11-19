@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="layout/layout :: head"></head>
 
@@ -33,22 +33,36 @@
                                   th:action="@{/productos/registrar}"
                                   th:object="${producto}" method="post" enctype="multipart/form-data"> 
                                 <div class="form-row">
-                                    <div class="form-group">
-                                        <img class="img-thumbnail rounded float-left"
-					style="max-width: 25%;" th:src="@{'/productos/uploads/' + ${producto.foto}}"
-                                        th:alt="${producto.foto}" th:if="${editar} "/>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6" th:if="${editar}">
+                                        <img class=""
+                                             style="max-width: 45%;" th:src="@{'/productos/uploads/' + ${producto.foto}}"
+                                             th:alt="${producto.foto}" />
+                                        <br>
+                                        <label for="imagen" style="color:green;">Imagen anterior</label>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6" th:if="${editar}">
+                                        <div class="custom-file">
+                                            <div class="imagePreview"></div>
+                                            <label for="file" th:text="${inf_img}"></label>
+                                            <input type="file" name="file" class="form-control-file" id="file" onchange="previewImage(this, [256], 4);" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-12 col-xl-12" th:if="${editar == false}">
+                                        <div class="custom-file">
+                                            <div class="imagePreview"></div>
+                                            <label for="file" th:text="${inf_img}"></label>
+                                            <input type="file" name="file" class="form-control-file" id="file" onchange="previewImage(this, [256], 4);" >
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">  
-                                        <div class="custom-file">
-                                            <label for="imagen" th:text="${inf_img}"></label>
-                                            <input type="file" name="file" class="form-control-file" id="file">
-                                        </div>
+                                        <label for="nombre">Nombre del Producto: </label>
+                                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" th:field="*{nombre}">
                                     </div>
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                        <label for="nombre">Nombre: </label>
-                                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" th:field="*{nombre}">
+                                        <label for="modelo">Modelo: </label>
+                                        <input type="text" class="form-control" id="modelo" placeholder="Modelo" th:field="*{modelo}">
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <label for="precio">Precio: </label>
@@ -70,17 +84,35 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
-                                        <label for="fecha_de_envasado">Fecha de Envasado: </label>
-                                        <input type="date" class="form-control" id="fecha_de_envasado" placeholder="Fecha de Envasado" th:field="*{fecha_envasado}">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="fecha_de_compra">Fecha de Compra </label>
+                                        <input type="date" class="form-control" name="fechaCompra" id="fechaCompra" placeholder="Fecha de Compra">
                                     </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
-                                        <label for="fecha_de_vencimiento">Fecha de Vencimiento: </label>
-                                        <input type="date" class="form-control" id="fecha_de_vencimiento" placeholder="Fecha de Vencimiento" th:field="*{fecha_vencimiento}">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="fecha_de_entrega">Fecha de Entrega: </label>
+                                        <input type="date" class="form-control" name="fechaEntrega" id="fechaEntrega" placeholder="Fecha de Entrega">
                                     </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
-                                        <label for="stock">Stock: </label>
-                                        <input type="number" class="form-control" id="stock" placeholder="Stock" min="0" th:field="*{stock}">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="monto_de_envio">Monto de Envío: </label>
+                                        <input type="number" class="form-control" name="montoEnvio" id="montoEnvio" placeholder="Monto de Envío" min="1">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="cantidad">Cantidad: </label>
+                                        <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad" min="1">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="tipo">Método de Pago: </label>
+                                        <select class="form-control" name="metodoPago" id="metodoPago">
+                                            <option th:each="m: ${metodosdepago}" th:text="${m.metodo}" th:value="${m.id}"></option>
+                                        </select>
+                                    </div>
+                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label>Descripción: </label>
+                                        <textarea class="form-control" rows="3" required id="descripcion" name="descripcion"></textarea>
                                     </div>
                                 </div>
 

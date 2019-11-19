@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.analistas.pdv.model.entity;
+package com.analistas.pdv.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,19 +23,20 @@ import javax.persistence.Table;
  * @author matia
  */
 @Entity
-@Table(name = "categorias")
-public class Categoria implements Serializable {
+@Table(name = "provincias")
+public class Provincia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_id_cat")
+    @Column(name = "pk_id_prov")
     private int id;
 
-    private String categoria;
+    @Column(name = "provincia")
+    private String provincia;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "categoria")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "provincia")
     @JsonIgnore
-    private List<Producto> productos;
+    private List<Ciudad> ciudades;
 
     public int getId() {
         return id;
@@ -46,25 +46,28 @@ public class Categoria implements Serializable {
         this.id = id;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getProvincia() {
+        return provincia;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public List<Ciudad> getCiudades() {
+        return ciudades;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setCiudades(List<Ciudad> ciudades) {
+        this.ciudades = ciudades;
     }
 
-    @Override
-    public String toString() {
-        return categoria;
+    public static String ucFirst(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        } else {
+            return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+        }
     }
 
 }

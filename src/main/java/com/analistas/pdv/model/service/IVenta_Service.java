@@ -5,7 +5,7 @@
  */
 package com.analistas.pdv.model.service;
 
-import com.analistas.pdv.model.entity.Venta;
+import com.analistas.pdv.model.entities.Venta;
 import java.util.List;
 
 /**

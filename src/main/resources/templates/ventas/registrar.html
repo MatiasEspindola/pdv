@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="layout/layout :: head"></head>
 
@@ -57,15 +57,11 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <label for="fecha">Fecha de Venta: </label>
                                         <input type="date" class="form-control" id="fecha" placeholder="Fecha de Venta" th:field="*{fecha}">
                                     </div>
-                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
-                                        <label for="hora">Hora: </label>
-                                        <input type="time" class="form-control" id="hora" placeholder="Hora" th:field="*{hora}">
-                                    </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <label for="tipo">Método de Pago: </label>
                                         <select class="form-control" th:field="*{metodo_de_pago}">
                                             <option th:each="m: ${metodosdepago}" th:text="${m.metodo}" th:value="${m.id}"></option>

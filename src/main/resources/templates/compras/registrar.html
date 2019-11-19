@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="layout/layout :: head"></head>
 
@@ -43,25 +43,29 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <label for="monto_envio">Monto de Envío </label>
                                         <input type="text" class="form-control" id="monto_envio" placeholder="Monto de Envío" th:field="*{monto_envio}">
                                     </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <label for="fecha">Fecha de Entrega: </label>
+                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Entrega" th:field="*{fechaEntrega}">
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <label for="cantidad">Cantidad: </label>
                                         <input type="text" class="form-control" id="cantidad" placeholder="Cantidad" th:field="*{cantidad}">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
-                                        <label for="fecha">Fecha de Compra: </label>
-                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Compra" th:field="*{fecha}">
-                                    </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <label for="tipo">Método de Pago: </label>
                                         <select class="form-control" th:field="*{metodo_de_pago}">
                                             <option th:each="m: ${metodosdepago}" th:text="${m.metodo}" th:value="${m.id}"></option>
                                         </select>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <label for="fecha">Fecha de Compra: </label>
+                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Compra" th:field="*{fechaCompra}">
                                     </div>
                                 </div>
 
