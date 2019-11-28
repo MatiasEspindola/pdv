@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionAttributes("producto")
@@ -76,7 +77,7 @@ public class productosController {
 
     @Autowired
     private MetodoPago_Service_Impl metododepagoServ;
-    
+
     @Autowired
     private Compra_Service_Impl compraServ;
 
@@ -185,10 +186,7 @@ public class productosController {
     }
 
     @PostMapping("/registrar")
-    public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto,
-            @RequestParam("fechaCompra") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaCompra, @RequestParam("fechaEntrega") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fechaEntrega,
-            @RequestParam("cantidad") int cantidad, @RequestParam("montoEnvio") double monto,
-            @RequestParam("metodoPago") int metodoPago, @RequestParam("descripcion") String descripcion) {
+    public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
 
         if (!foto.isEmpty()) {
             if (producto.getId() > 0 && producto.getFoto() != null
@@ -207,37 +205,34 @@ public class productosController {
             producto.setFoto(uniqueFilename);
         }
 
-        Compra compra = new Compra();
-        
-        compra.setCantidad(cantidad);
-        compra.setFechaCompra(fechaCompra);
-        compra.setFechaEntrega(fechaEntrega);
-        compra.setMonto_envio(monto);
-        compra.setMetodo_de_pago(metodopagoServ.findById(metodoPago));
-        compra.setDescripcion(descripcion);
-        compra.setSubtotal(producto.getPrecio());
-        compra.setTotal(compra.getSubtotal() + compra.getMonto_envio());
-        compra.setProducto(producto);
+        List<Producto> productos = productoServ.findAll();
 
-        producto.setStock(cantidad);
-        
-        compra.setDemorado(false);
-        
-        if(fechaEntrega.after(fechaCompra)){
-            compra.setEn_camino(true);
-        }else{
-            compra.setEn_camino(false);
+        for (int i = 0; i < productos.size(); i++) {
+            if (producto.getNombre().equals(productos.get(i).getNombre()) && editar == false) {
+                if (producto.getModelo().equals(productos.get(i).getModelo())) {
+                    flash.addFlashAttribute("existente", "¡El producto " + producto.getNombre()+ " - " + producto.getModelo() + " ya existe!");
+                    return "redirect:/productos/ver_productos";
+                }
+            }
+        }
+
+        if (editar) {
+            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
+        } else {
+            flash.addFlashAttribute("nuevo", "¡Producto agregado con éxito!");
         }
 
         productoServ.save(producto);
-        compraServ.save(compra);
+
         return "redirect:/productos/ver_productos";
     }
 
     @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id) {
+    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes flash) {
 
         if (id > 0) {
+            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
+            
             Producto producto = productoServ.findById(id);
             productoServ.delete(producto);
         }

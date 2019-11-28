@@ -29,6 +29,28 @@
                             <i class="fas fa-chart-area"></i>
                             Lista de Proveedores</div>
                         <div class="card-body">
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${nuevo != null}" th:text="${nuevo}"> 
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${eliminar != null}" th:text="${eliminar}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${existente != null}" th:text="${existente}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${editar != null}" th:text="${editar}">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
                             <table id="tabla" class="table table-hover  text-center table-responsive-xl table-bordered" style="width:100%">
                                 <thead class="thead-dark">
                                     <tr>
@@ -74,7 +96,7 @@
                                     <i class="fas fa-chart-bar"></i>
                                     Bar Chart Example</div>
                                 <div class="card-body">
-                                    
+
                                 </div>
 
                             </div>
@@ -85,7 +107,7 @@
                                     <i class="fas fa-chart-pie"></i>
                                     Pie Chart Example</div>
                                 <div class="card-body">
-                                   
+
                                 </div>
 
                             </div>

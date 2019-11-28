@@ -34,44 +34,52 @@
                                   th:object="${compra}" method="post"> 
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                        <br>
                                         <label for="buscar_producto">Buscar Producto </label>
-                                        <input type="text" class="form-control" id="buscar_producto" name="buscar_producto" th:placeholder="${inf}"/>
+                                        <input type="text" class="form-control" id="buscar_producto" name="buscar_producto" th:placeholder="${inf}" required/>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <br>
                                         <label>Descripción: </label>
-                                        <textarea th:field="*{descripcion}" class="form-control" rows="3" required></textarea>
+                                        <textarea th:field="*{descripcion}" class="form-control" rows="3" maxlength="255" required></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <br>
                                         <label for="monto_envio">Monto de Envío </label>
-                                        <input type="text" class="form-control" id="monto_envio" placeholder="Monto de Envío" th:field="*{monto_envio}">
+                                        <input type="number" class="form-control" id="monto_envio" placeholder="Monto de Envío" th:field="*{monto_envio}" required> 
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <br>
                                         <label for="fecha">Fecha de Entrega: </label>
-                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Entrega" th:field="*{fechaEntrega}">
+                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Entrega" th:field="*{fechaEntrega}" required>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                        <br>
                                         <label for="cantidad">Cantidad: </label>
-                                        <input type="text" class="form-control" id="cantidad" placeholder="Cantidad" th:field="*{cantidad}">
+                                        <input type="number" min="1" class="form-control" id="cantidad" placeholder="Cantidad" th:field="*{cantidad}" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <br>
                                         <label for="tipo">Método de Pago: </label>
-                                        <select class="form-control" th:field="*{metodo_de_pago}">
+                                        <select class="form-control" th:field="*{metodo_de_pago}" required>
                                             <option th:each="m: ${metodosdepago}" th:text="${m.metodo}" th:value="${m.id}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
+                                        <br>
                                         <label for="fecha">Fecha de Compra: </label>
-                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Compra" th:field="*{fechaCompra}">
+                                        <input type="date" class="form-control" id="fecha" placeholder="Fecha de Compra" th:field="*{fechaCompra}" required>
                                     </div>
                                 </div>
-
+                                <br>
                                 <input type="hidden" id="ingresar_producto" name="ingresar_producto" th:field="*{producto}" required />
 
                                 <button class="btn btn-primary" type="submit" style="margin-left: 2px;">Enviar</button> <a class="btn btn-danger" th:href="@{/compras/ver_compras}">Cancelar</a>
+                                <br>
                             </form>
                         </div>
                     </div>

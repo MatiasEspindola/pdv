@@ -4,12 +4,15 @@
  * and open the template in the editor.
  */
 package com.analistas.pdv.controller;
+
 import com.analistas.pdv.model.entities.Compra;
 import com.analistas.pdv.model.entities.Metodo_De_Pago;
 import com.analistas.pdv.model.entities.Producto;
+import com.analistas.pdv.model.entities.Ticket;
 import com.analistas.pdv.model.entities.Venta;
 import com.analistas.pdv.model.service.MetodoPago_Service_Impl;
 import com.analistas.pdv.model.service.Producto_Service_Impl;
+import com.analistas.pdv.model.service.Ticket_Service_Impl;
 import com.analistas.pdv.model.service.Venta_Service_Impl;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -42,6 +45,11 @@ public class ventasController {
     @Autowired
     private MetodoPago_Service_Impl metododepagoServ;
 
+    @Autowired
+    private Ticket_Service_Impl ticketServ;
+
+    private static boolean editar;
+
     @GetMapping("/ver_ventas")
     public String ventas(Map m) {
 
@@ -57,7 +65,7 @@ public class ventasController {
     List<Producto> cargarProducto(@PathVariable String term) {
         return productoServ.buscarPorNombre(term);
     }
-    
+
     @GetMapping("/detalles/{id}")
     public String detalles_venta(Map m, @PathVariable(value = "id") int id) {
 
@@ -110,20 +118,54 @@ public class ventasController {
     }
 
     @PostMapping("/registrar")
-    public String guardar(@Valid Venta venta, Map m) {
-        ventaServ.save(venta);
+    public String guardar(@Valid Venta venta, Map m, RedirectAttributes flash) {
+
+        if (editar) {
+            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
+        } else {
+
+            if (venta.getProducto().getStock() == 0) {
+                flash.addFlashAttribute("existente", "¡No hay stock del producto " + venta.getProducto().getNombre() + " - " + venta.getProducto().getModelo() + "!");
+                return "redirect:/ventas/ver_ventas";
+            } else {
+
+                productoServ.findById(venta.getProducto().getId()).setStock(
+                        venta.getProducto().getStock() - venta.getCantidad()
+                );
+
+                Ticket ticket = new Ticket();
+                ticket.setVenta(venta);
+
+                ventaServ.save(venta);
+                ticketServ.save(ticket);
+
+            }
+
+            flash.addFlashAttribute("nuevo", "¡Venta agregada con éxito!");
+        }
+
         return "redirect:/ventas/ver_ventas";
     }
 
     @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id) {
+    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes flash) {
 
         if (id > 0) {
+            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
+
             Venta venta = ventaServ.findById(id);
+
+            productoServ.findById(venta.getProducto().getId()).setStock(
+                    venta.getProducto().getStock() + venta.getCantidad()
+            );
+
+            Ticket ticket = ticketServ.findById(venta.getId());
+
+            ticketServ.delete(ticket);
             ventaServ.delete(venta);
         }
 
-        return "redirect:/ventas/ver_venta";
+        return "redirect:/ventas/ver_ventas";
     }
 
 }

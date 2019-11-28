@@ -57,7 +57,6 @@ public class proveedoresController {
     private Ciudad_Service_Impl ciudadServ;
 
     private static boolean editar;
-    private static boolean tel;
 
     @GetMapping("/ver_proveedores")
     public String proveedores(Map m) {
@@ -99,8 +98,6 @@ public class proveedoresController {
 
         m.put("titulo", "Detalles");
         m.put("proveedor", proveedor);
-
-       
 
         return "proveedores/detalles";
     }
@@ -148,7 +145,7 @@ public class proveedoresController {
     }
 
     @PostMapping("/registrar")
-    public String guardar(@Valid Proveedor proveedor, Map m, @RequestParam("file") MultipartFile foto) {
+    public String guardar(@Valid Proveedor proveedor, Map m, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
 
         if (!foto.isEmpty()) {
             if (proveedor.getId() > 0 && proveedor.getFoto() != null
@@ -165,16 +162,36 @@ public class proveedoresController {
             }
 
             proveedor.setFoto(uniqueFilename);
-        } 
+        }
+
+        List<Proveedor> proveedores = proveedorServ.findAll();
+
+        for (int i = 0; i < proveedores.size(); i++) {
+            if (proveedor.getNombre().equals(proveedores.get(i).getNombre()) && editar == false) {
+                if (proveedor.getCiudad().equals(proveedores.get(i).getCiudad())) {
+                    flash.addFlashAttribute("existente", "¡El proveedor " + proveedor.getNombre() + " - " + proveedor.getCiudad().getCiudad() + " ya existe!");
+                    return "redirect:/proveedores/ver_proveedores";
+                }
+            }
+        }
+
+        if (editar) {
+            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
+        } else {
+            flash.addFlashAttribute("nuevo", "¡Proveedor agregado con éxito!");
+        }
 
         proveedorServ.save(proveedor);
         return "redirect:/proveedores/ver_proveedores";
     }
 
     @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes mensaje) {
+    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes mensaje, RedirectAttributes flash) {
 
         if (id > 0) {
+            
+            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
+            
             Proveedor proveedor = proveedorServ.findById(id);
             proveedorServ.delete(proveedor);
         }

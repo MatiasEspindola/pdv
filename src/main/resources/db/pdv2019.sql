@@ -20,7 +20,7 @@ CREATE TABLE usuarios(
 CREATE TABLE productos(
 	pk_id_prod int not null primary key auto_increment,
     nombre varchar(25) not null,
-    modelo varchar(55) not null,
+    modelo varchar(15) not null,
 	precio double not null,
     foto varchar(255) not null,
   --  fecha_envasado date not null,
@@ -58,11 +58,11 @@ CREATE TABLE HistorialCompra(
 
 CREATE TABLE proveedores(
 	pk_id_prov int not null primary key auto_increment,
-    nombre varchar(55) not null,
+    nombre varchar(20) not null,
 	direccion varchar(55) not null,
-    tel varchar(20) not null,
-    cel varchar(20) not null,
-    email varchar(55) not null,
+    tel varchar(12) not null,
+    cel varchar(12) not null,
+    email varchar(30) not null,
     foto varchar(255) not null
 );
 
@@ -105,13 +105,13 @@ CREATE TABLE tipos_documentos(
 
 CREATE TABLE clientes(
 	pk_id_cli int not null primary key auto_increment,
-	nombre varchar(55) not null,
-    apellido varchar(40) not null,
+	nombre varchar(20) not null,
+    apellido varchar(20) not null,
     doc varchar(10) not null,
     direccion varchar(55) not null,
-    tel varchar(20) not null,
-    cel varchar(20) not null,
-    email varchar(55) not null,
+    tel varchar(12) not null,
+    cel varchar(12) not null,
+    email varchar(30) not null,
     obs varchar(255) not null
 );
 
