@@ -23,6 +23,21 @@
                         <li class="breadcrumb-item active">Registrar Cliente</li>
                     </ol>
 
+                    <style>
+                        .ui-autocomplete {
+                            max-height: 100px;
+                            overflow-y: auto;
+                            /* prevent horizontal scrollbar */
+                            overflow-x: hidden;
+                        }
+                        /* IE 6 doesn't support max-height
+                         * we use height instead, but this forces the menu to always be this tall
+                         */
+                        * html .ui-autocomplete {
+                            height: 100px;
+                        }
+                    </style>
+
                     <!-- Ver Clientes -->
                     <div class="card mb-3">
                         <div class="card-header">
@@ -33,68 +48,86 @@
                                   th:action="@{/clientes/registrar}"
                                   th:object="${cliente}" method="post"> 
                                 <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <div class="alert alert-danger" role="alert" th:if="${error}">
+                                            <h4 class="alert-heading"><b>Error en el formulario</b></h4>
+                                            <p>Asegúrate de completar todos los campos requeridos (*)</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <h4>Formulario:</h4>
+                                        <hr>
+                                    </div>
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                         <br>
-                                        <label for="nombre">Nombre: </label>
+                                        <label for="nombre">(*) Nombre: </label>
                                         <input type="text" class="form-control" id="nombre" placeholder="Nombre" th:field="*{nombre}" maxlength="20" required>
+                                        <small th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <br>
-                                        <label for="apellido">Apellido: </label>
+                                        <label for="apellido">(*) Apellido: </label>
                                         <input type="text" class="form-control" id="apellido" placeholder="Apellido" th:field="*{apellido}" maxlength="20" required>
+                                        <small th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}" class="form-text text-danger"></small>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                         <br>
-                                        <label for="tipo">Tipo de documento: </label>
+                                        <label for="tipo">(*) Tipo de documento: </label>
                                         <select class="form-control" th:field="*{tipo}" required>
                                             <option th:each="t: ${tiposdocumentos}" th:text="${t.tipo}" th:value="${t.id}"></option>
                                         </select>
+
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <br>
-                                        <label for="documento">Documento: </label>
-                                        <input type="text" class="form-control" id="documento" placeholder="Documento" th:field="*{doc}" maxlength="10" required>
+                                        <label for="documento">(*) Documento: </label>
+                                        <input type="text" class="form-control" id="documento" placeholder="Documento" th:field="*{doc}" maxlength="10" required> 
+                                        <small th:if="${#fields.hasErrors('doc')}" th:errors="*{doc}" class="form-text text-danger"></small>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <br>
-                                        <label for="email">Email: </label>
+                                        <label for="email">(*) Email: </label>
                                         <input type="email" class="form-control" id="email" placeholder="Email" th:field="*{email}"  maxlength="30" required>
+                                        <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <br>
-                                        <label for="celular">Celular: </label>
+                                        <label for="celular">(*) Celular: </label>
                                         <input type="text" class="form-control" id="celular" placeholder="Celular" th:field="*{cel}" maxlength="14" required>
+                                        <small th:if="${#fields.hasErrors('cel')}" th:errors="*{cel}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <br>
                                         <label for="telefono">Teléfono: </label>
-                                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" th:field="*{tel}" maxlength="14" required>
+                                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" th:field="*{tel}" maxlength="14">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <br>
-                                        <label for="buscar_ciudad">Buscar Ciudad: </label>
-                                        <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad" th:placeholder="${inf}" required/>
-
+                                        <label for="buscar_ciudad">(*) Buscar Ciudad: </label>
+                                        <input type="hidden" id="ingresar_ciudad" name="ingresar_ciudad" th:field="*{ciudad}" required>
+                                        <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad" th:placeholder="${inf}">
+                                        <small th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <br>
-                                        <label>Dirección: </label>
+                                        <label>(*) Dirección: </label>
                                         <input th:field="*{direccion}" class="form-control" placeholder="Dirección" maxlength="55" required>
+                                        <small th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
                                         <br>
-                                        <label>Observaciones: </label>
+                                        <label>(*) Observaciones: </label>
                                         <textarea th:field="*{obs}" class="form-control" rows="3"  maxlength="255" required></textarea>
+                                        <small th:if="${#fields.hasErrors('obs')}" th:errors="*{obs}" class="form-text text-danger"></small>
                                     </div>
                                 </div>
                                 <br>
-                                <input type="hidden" id="ingresar_ciudad" name="ingresar_ciudad" th:field="*{ciudad}" required>
 
                                 <button class="btn btn-primary" type="submit" style="margin-left: 2px;">Enviar</button> <a class="btn btn-danger" th:href="@{/clientes/ver_clientes}">Cancelar</a>
                                 <br>
@@ -117,7 +150,6 @@
         <a th:replace="layout/layout :: scroll"></a>
         <footer th:replace="layout/layout :: footer"></footer>
         <script th:replace="clientes/js/autocomplete-ciudad :: javascript"></script>
-
     </body>
 
 </html>

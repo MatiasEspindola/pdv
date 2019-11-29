@@ -21,6 +21,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -35,21 +38,32 @@ public class Cliente implements Serializable {
     @Column(name = "pk_id_cli")
     private int id;
 
+    @NotEmpty
     private String nombre;
+    @NotEmpty
     private String apellido;
+    @NotEmpty
     private String doc;
+    @NotEmpty
     private String direccion;
+    @NotEmpty
+    @Email
     private String email;
+    @NotEmpty
     private String tel;
+    @NotEmpty
     private String cel;
+    @NotEmpty
     private String obs;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_ciudad", referencedColumnName = "pk_id_ciu")
+    @NotNull
     private Ciudad ciudad;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_tipo", referencedColumnName = "pk_id_tipo")
+    @NotNull
     private Tipodocumento tipo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cliente")

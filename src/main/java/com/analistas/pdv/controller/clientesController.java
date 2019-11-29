@@ -17,10 +17,13 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -114,27 +117,50 @@ public class clientesController {
         return "clientes/registrar";
     }
 
-    @PostMapping("/registrar")
-    public String guardar(@Valid Cliente cliente, Map m, RedirectAttributes flash) {
+    @RequestMapping(value = "/registrar", method = RequestMethod.POST)
+    public String guardar(@ModelAttribute("cliente") @Valid Cliente cliente, BindingResult result, Map m, RedirectAttributes flash) {
 
-        List<Cliente> clientes = clienteServ.findAll();
-
-        for (int i = 0; i < clientes.size(); i++) {
-            if (cliente.getDoc().equals(clientes.get(i).getDoc()) && editar == false) {
-                flash.addFlashAttribute("existente", "¡El cliente con el dni " + cliente.getDoc()+ " ya existe!");
-                return "redirect:/clientes/ver_clientes";
-            }
-        }
+        String titulo;
+        boolean error = false;
 
         if (editar) {
             flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
+            titulo = "Editar Cliente";
         } else {
             flash.addFlashAttribute("nuevo", "¡Cliente agregado con éxito!");
+            titulo = "Registrar Cliente";
         }
 
-        clienteServ.save(cliente);
+        if (result.hasErrors()) {
 
-        return "redirect:/clientes/ver_clientes";
+            error = true;
+
+            List<Tipodocumento> tiposdocumentos = tipodocumentoServ.findAll();
+            m.put("tiposdocumentos", tiposdocumentos);
+
+            m.put("titulo", titulo);
+            m.put("error", error);
+
+            return "clientes/registrar";
+        } else {
+
+            List<Cliente> clientes = clienteServ.findAll();
+
+            for (int i = 0; i < clientes.size(); i++) {
+                if (cliente.getDoc().equals(clientes.get(i).getDoc()) && editar == false) {
+                    flash.addFlashAttribute("existente", "¡El cliente con el dni " + cliente.getDoc() + " ya existe!");
+                    return "redirect:/clientes/ver_clientes";
+                }
+            }
+
+            clienteServ.save(cliente);
+
+            m.put("error", error);
+            
+            return "redirect:/clientes/ver_clientes";
+
+        }
+
     }
 
     @RequestMapping(value = "/borrar/{id}")
