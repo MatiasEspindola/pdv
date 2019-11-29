@@ -24,6 +24,8 @@ and open the template in the editor.
         <!-- Custom styles for this template-->
         <link href="/css/sb-admin.css" rel="stylesheet">
         <link href="/css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
 
         <link href="/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 
@@ -33,15 +35,19 @@ and open the template in the editor.
     </head>
     <body>
 
-        <style>
+        <style th:fragment="style">
             .ui-autocomplete {
-                max-height: 200px;
+                max-height: 100px;
                 overflow-y: auto;
                 /* prevent horizontal scrollbar */
                 overflow-x: hidden;
-                /* add padding to account for vertical scrollbar */
-                padding-right: 20px;
-            } 
+            }
+            /* IE 6 doesn't support max-height
+             * we use height instead, but this forces the menu to always be this tall
+             */
+            * html .ui-autocomplete {
+                height: 100px;
+            }
         </style>
 
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top" th:fragment="nav">

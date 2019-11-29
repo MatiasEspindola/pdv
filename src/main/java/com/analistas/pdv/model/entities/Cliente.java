@@ -53,8 +53,6 @@ public class Cliente implements Serializable {
     private String tel;
     @NotEmpty
     private String cel;
-    @NotEmpty
-    private String obs;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_ciudad", referencedColumnName = "pk_id_ciu")
@@ -131,14 +129,6 @@ public class Cliente implements Serializable {
 
     public void setCel(String cel) {
         this.cel = cel;
-    }
-
-    public String getObs() {
-        return obs;
-    }
-
-    public void setObs(String obs) {
-        this.obs = obs;
     }
 
     public Ciudad getCiudad() {

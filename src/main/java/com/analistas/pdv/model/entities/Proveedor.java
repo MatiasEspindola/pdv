@@ -22,6 +22,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -37,15 +40,22 @@ public class Proveedor implements Serializable {
     @Column(name = "pk_id_prov")
     private int id;
 
+    @NotEmpty
     private String nombre;
+    @NotEmpty
     private String direccion;
+    @NotEmpty
     private String tel;
+    @NotEmpty
     private String cel;
+    @NotEmpty
+    @Email
     private String email;
     private String foto;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_ciu", referencedColumnName = "pk_id_ciu")
+    @NotNull
     private Ciudad ciudad;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "proveedor")

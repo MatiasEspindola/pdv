@@ -111,8 +111,7 @@ CREATE TABLE clientes(
     direccion varchar(55) not null,
     tel varchar(12) not null,
     cel varchar(12) not null,
-    email varchar(30) not null,
-    obs varchar(255) not null
+    email varchar(30) not null
 );
 
 CREATE TABLE categorias(

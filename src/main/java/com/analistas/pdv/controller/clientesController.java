@@ -6,14 +6,8 @@ import com.analistas.pdv.model.entities.Tipodocumento;
 import com.analistas.pdv.model.service.Ciudad_Service_Impl;
 import com.analistas.pdv.model.service.Cliente_Service_Impl;
 import com.analistas.pdv.model.service.TipoDocumento_Service_Impl;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -118,7 +109,7 @@ public class clientesController {
     }
 
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
-    public String guardar(@ModelAttribute("cliente") @Valid Cliente cliente, BindingResult result, Map m, RedirectAttributes flash) {
+    public String guardar(@Valid Cliente cliente, BindingResult result, Map m, RedirectAttributes flash) {
 
         String titulo;
         boolean error = false;

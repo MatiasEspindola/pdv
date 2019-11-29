@@ -7,6 +7,8 @@
 
         <nav th:replace="layout/layout :: nav"></nav>
 
+        <style th:replace="layout/layout :: style"></style>
+
         <div id="wrapper">
 
             <ul th:replace="layout/layout :: sidebar"></ul>
@@ -24,18 +26,7 @@
                     </ol>
 
                     <style>
-                        .ui-autocomplete {
-                            max-height: 100px;
-                            overflow-y: auto;
-                            /* prevent horizontal scrollbar */
-                            overflow-x: hidden;
-                        }
-                        /* IE 6 doesn't support max-height
-                         * we use height instead, but this forces the menu to always be this tall
-                         */
-                        * html .ui-autocomplete {
-                            height: 100px;
-                        }
+
                     </style>
 
                     <!-- Ver Clientes -->
@@ -107,24 +98,18 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                         <br>
                                         <label for="buscar_ciudad">(*) Buscar Ciudad: </label>
                                         <input type="hidden" id="ingresar_ciudad" name="ingresar_ciudad" th:field="*{ciudad}" required>
                                         <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad" th:placeholder="${inf}">
                                         <small th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}" class="form-text text-danger"></small>
                                     </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
+                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-6 col-xl-6">
                                         <br>
                                         <label>(*) Dirección: </label>
                                         <input th:field="*{direccion}" class="form-control" placeholder="Dirección" maxlength="55" required>
                                         <small th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" class="form-text text-danger"></small>
-                                    </div>
-                                    <div class="form-group col-12 col-sm-12 ol-md-12 col-lg-4 col-xl-4">
-                                        <br>
-                                        <label>(*) Observaciones: </label>
-                                        <textarea th:field="*{obs}" class="form-control" rows="3"  maxlength="255" required></textarea>
-                                        <small th:if="${#fields.hasErrors('obs')}" th:errors="*{obs}" class="form-text text-danger"></small>
                                     </div>
                                 </div>
                                 <br>
