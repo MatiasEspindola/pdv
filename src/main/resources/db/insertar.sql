@@ -11,6 +11,7 @@ INSERT INTO categorias(categoria) VALUES ('Energía');
 INSERT INTO categorias(categoria) VALUES ('Impresión');
 INSERT INTO categorias(categoria) VALUES ('Periféricos');
 INSERT INTO categorias(categoria) VALUES ('TV Box / Android TV');
+INSERT INTO categorias(categoria) VALUES ('Notebooks');
 
 INSERT INTO tipos_documentos(tipo) VALUES
 ('Documento Nacional de Identidad'),
@@ -20,6 +21,9 @@ INSERT INTO tipos_documentos(tipo) VALUES
 ('Doc. Nac. de Identidad Temporario');
 
 -- INSERTAR 
+
+INSERT INTO marcas(marca) VALUES ('COMBO');
+
 -- A
 INSERT INTO marcas(marca) VALUES ('ACER');
 INSERT INTO marcas(marca) VALUES ('ADATA');
@@ -57,6 +61,7 @@ INSERT INTO marcas(marca) VALUES ('KENSINGTON');
 INSERT INTO marcas(marca) VALUES ('LENOVO');
 INSERT INTO marcas(marca) VALUES ('LINKSYS');
 INSERT INTO marcas(marca) VALUES ('LG');
+INSERT INTO marcas(marca) VALUES ('LOGITECH');
 -- M
 INSERT INTO marcas(marca) VALUES ('MICROSOFT');
 INSERT INTO marcas(marca) VALUES ('MSI');
@@ -83,6 +88,7 @@ INSERT INTO marcas(marca) VALUES ('TP-LINK');
 -- U
 INSERT INTO marcas(marca) VALUES ('URBY');
 -- V
+INSERT INTO marcas(marca) VALUES ('VAIO');
 -- W
 INSERT INTO marcas(marca) VALUES ('WILEYFOX');
 -- X

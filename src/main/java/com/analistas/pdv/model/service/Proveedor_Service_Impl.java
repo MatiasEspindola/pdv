@@ -23,6 +23,18 @@ public class Proveedor_Service_Impl implements IProveedor_Service {
     public List<Proveedor> findAll() {
         return proveedorDao.findAll();
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Proveedor> buscarHabilitados() {
+        return proveedorDao.buscarHabilitados();
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Proveedor> buscarDeshabilitados() {
+        return proveedorDao.buscarDeshabilitados();
+    }
 
     @Override
     @Transactional(readOnly = true)

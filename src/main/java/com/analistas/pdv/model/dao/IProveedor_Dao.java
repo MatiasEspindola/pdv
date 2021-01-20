@@ -19,4 +19,10 @@ public interface IProveedor_Dao extends JpaRepository<Proveedor, Integer>{
     @Query("Select p from Proveedor p where p.nombre like %?1%")
     public List<Proveedor> buscarPorNombre(String term);
     
+    @Query("select p from Proveedor p where p.hab = true")
+    public List<Proveedor> buscarHabilitados();
+    
+    @Query("select p from Proveedor p where p.hab = false")
+    public List<Proveedor> buscarDeshabilitados();
+    
 }

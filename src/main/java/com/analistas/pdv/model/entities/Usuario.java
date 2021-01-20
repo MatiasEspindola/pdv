@@ -34,12 +34,18 @@ public class Usuario implements Serializable {
 
     private String us;
     private String ps;
+    private boolean clave;
     private boolean hab;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario_venta")
     @JsonManagedReference
     @JsonIgnore
-    private List<Venta> ventas;
+    private List<Registro_Venta> ventas;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario_compra")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Registro_Compra> compras;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
     @JsonManagedReference
@@ -70,6 +76,14 @@ public class Usuario implements Serializable {
         this.ps = ps;
     }
 
+    public boolean isClave() {
+        return clave;
+    }
+
+    public void setClave(boolean clave) {
+        this.clave = clave;
+    }
+
     public boolean isHab() {
         return hab;
     }
@@ -78,11 +92,11 @@ public class Usuario implements Serializable {
         this.hab = hab;
     }
 
-    public List<Venta> getVentas() {
+    public List<Registro_Venta> getVentas() {
         return ventas;
     }
 
-    public void setVentas(List<Venta> ventas) {
+    public void setVentas(List<Registro_Venta> ventas) {
         this.ventas = ventas;
     }
 

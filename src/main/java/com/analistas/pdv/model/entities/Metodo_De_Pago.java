@@ -36,13 +36,13 @@ public class Metodo_De_Pago implements Serializable {
 
     private boolean hab;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago_venta")
     @JsonIgnore
-    private List<Venta> ventas;
+    private List<Factura_Venta> facturas_ventas;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "metodo_de_pago_compra")
     @JsonIgnore
-    private List<Compra> compras;
+    private List<Factura_Compra> facturas_compras;
 
     public int getId() {
         return id;
@@ -68,20 +68,20 @@ public class Metodo_De_Pago implements Serializable {
         this.hab = hab;
     }
 
-    public List<Venta> getVentas() {
-        return ventas;
+    public List<Factura_Venta> getFacturas_ventas() {
+        return facturas_ventas;
     }
 
-    public void setVentas(List<Venta> ventas) {
-        this.ventas = ventas;
+    public void setFacturas_ventas(List<Factura_Venta> facturas_ventas) {
+        this.facturas_ventas = facturas_ventas;
     }
 
-    public List<Compra> getCompras() {
-        return compras;
+    public List<Factura_Compra> getFacturas_compras() {
+        return facturas_compras;
     }
 
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
+    public void setFacturas_compras(List<Factura_Compra> facturas_compras) {
+        this.facturas_compras = facturas_compras;
     }
 
 }

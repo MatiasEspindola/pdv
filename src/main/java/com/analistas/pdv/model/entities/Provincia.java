@@ -32,7 +32,7 @@ public class Provincia {
     private int id;
 
     @Column(name = "provincia")
-    private String provincia;
+    private String nombre;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "provincia")
     @JsonIgnore
@@ -46,12 +46,12 @@ public class Provincia {
         this.id = id;
     }
 
-    public String getProvincia() {
-        return provincia;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public List<Ciudad> getCiudades() {
@@ -69,5 +69,12 @@ public class Provincia {
             return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
         }
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
 
 }

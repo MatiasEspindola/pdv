@@ -5,10 +5,9 @@
  */
 package com.analistas.pdv.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,9 +20,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -38,34 +40,27 @@ public class Cliente implements Serializable {
     @Column(name = "pk_id_cli")
     private int id;
 
-    @NotEmpty
-    private String nombre;
-    @NotEmpty
-    private String apellido;
-    @NotEmpty
-    private String doc;
-    @NotEmpty
-    private String direccion;
-    @NotEmpty
-    @Email
-    private String email;
-    @NotEmpty
-    private String tel;
-    @NotEmpty
-    private String cel;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_id_ciudad", referencedColumnName = "pk_id_ciu")
-    @NotNull
-    private Ciudad ciudad;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_id_tipo", referencedColumnName = "pk_id_tipo")
-    @NotNull
-    private Tipodocumento tipo;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cliente")
-    private List<Venta> ventas;
+    private List<Factura_Venta> facturas_ventas;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cliente")
+    private List<Tipocliente> tiposclientes;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cliente")
+    @JsonIgnore
+    private List<Telefono_Cliente> telefono_cliente;
+
+    private boolean hab;
+
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date alta;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_id_per", referencedColumnName = "pk_id_per")
+    @NotNull
+    private Persona persona;
 
     public int getId() {
         return id;
@@ -75,84 +70,54 @@ public class Cliente implements Serializable {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public List<Factura_Venta> getFacturas_ventas() {
+        return facturas_ventas;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setFacturas_ventas(List<Factura_Venta> facturas_ventas) {
+        this.facturas_ventas = facturas_ventas;
     }
 
-    public String getApellido() {
-        return apellido;
+    public Persona getPersona() {
+        return persona;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
-    public String getDoc() {
-        return doc;
+    public boolean isHab() {
+        return hab;
     }
 
-    public void setDoc(String doc) {
-        this.doc = doc;
+    public void setHab(boolean hab) {
+        this.hab = hab;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public Date getAlta() {
+        return alta;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setAlta(Date alta) {
+        this.alta = alta;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Tipocliente> getTiposclientes() {
+        return tiposclientes;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTiposclientes(List<Tipocliente> tiposclientes) {
+        this.tiposclientes = tiposclientes;
     }
 
-    public String getTel() {
-        return tel;
+    public List<Telefono_Cliente> getTelefono_cliente() {
+        return telefono_cliente;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setTelefono_cliente(List<Telefono_Cliente> telefono_cliente) {
+        this.telefono_cliente = telefono_cliente;
     }
-
-    public String getCel() {
-        return cel;
-    }
-
-    public void setCel(String cel) {
-        this.cel = cel;
-    }
-
-    public Ciudad getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(Ciudad ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public List<Venta> getVentas() {
-        return ventas;
-    }
-
-    public void setVentas(List<Venta> ventas) {
-        this.ventas = ventas;
-    }
-
-    public Tipodocumento getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipodocumento tipo) {
-        this.tipo = tipo;
-    }
+    
+    
 
 }

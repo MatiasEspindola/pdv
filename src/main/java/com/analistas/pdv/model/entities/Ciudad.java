@@ -47,7 +47,7 @@ public class Ciudad implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ciudad")
     @JsonIgnore
-    private List<Cliente> clientes;
+    private List<Persona> personas;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ciudad")
     @JsonIgnore
@@ -85,12 +85,12 @@ public class Ciudad implements Serializable {
         this.provincia = provincia;
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
+    public List<Persona> getPersonas() {
+        return personas;
     }
 
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
     }
 
     public List<Proveedor> getProveedores() {
@@ -103,7 +103,7 @@ public class Ciudad implements Serializable {
 
     @Override
     public String toString() {
-        return cp + ", " + ciudad + ", " + provincia.getProvincia();
+        return cp + ", " + ciudad + ", " + provincia.getNombre();
     }
     
     

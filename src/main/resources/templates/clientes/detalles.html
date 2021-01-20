@@ -1,87 +1,126 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
-
-    <head th:replace="layout/layout :: head"></head>
-
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!doctype html>
+<html lang="en">
+    <head th:replace="layout :: head"> </head>
     <body id="page-top">
 
-        <nav th:replace="layout/layout :: nav"></nav>
 
+        <!-- Page Wrapper -->
         <div id="wrapper">
 
-            <ul th:replace="layout/layout :: sidebar"></ul>
+            <!-- Sidebar -->
+            <div th:replace="layout :: sidebar"></div>
+            <!-- End of Sidebar -->
 
-            <div id="content-wrapper">
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
 
-                <div class="container-fluid">
+                <!-- Main Content -->
+                <div id="content">
 
-                    <!-- Breadcrumbs-->
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a th:href="@{/clientes/ver_clientes}">Clientes</a>
-                        </li>
-                        <li class="breadcrumb-item active">Detalles</li>
-                    </ol>
+                    <!-- Topbar -->
+                    <div th:replace="layout :: topbar"></div>
+                    <!-- End of Topbar -->
 
-                    <!-- Ver Clientes -->
-                    <div class="card mb-3">
-                        <div class="card-header">
-                            <i class="fas fa-chart-area"></i>
-                            Ver Detalle</div>
-                        <div class="card-body">
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
 
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-12 col-sm-12"></div>
-                                    <div class="col-lg-4 col-md-12 col-sm-12"></div>
-                                    <div class="col-lg-4 col-md-12 col-sm-12"></div>
-                                </div>
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Detalles de Cliente</h6>
                             </div>
+                            <div class="card-body">
 
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-left">
+                                    <span><b>Cliente: </b><em th:text="${cliente.persona.apellido} + ', ' + ${cliente.persona.nombre}"></em></span>
+                                    <br><br>
+                                    <span><b>Documento: </b><em th:text="${cliente.persona.doc}"></em></span><br>
+                                    <span><b>Email: </b><em th:text="${cliente.persona.email}"></em></span><br>
+                                    <span><b>Teléfono/s: </b><em th:text="${cliente.telefono_cliente[0].tel1} + ', ' + ${cliente.telefono_cliente[0].tel2}"></em></span><br>
+                                    <span><b>Ciudad: </b><em th:text="${cliente.persona.ciudad.provincia.nombre} + ', ' + ${cliente.persona.ciudad.ciudad}"></em></span>
+                                    <br><br>
+                                    <span><b>Fecha de alta: </b><em th:text="${cliente.alta}"></em></span>
+                                </div>
+
+                                <br>
+                                <a th:href="@{/clientes/ver/habilitacion/} + ${cliente.id}" class="btn btn-success"
+                                   th:if="${cliente.hab == false}">Habilitar</a>
+                                <a th:href="@{/clientes/ver/habilitacion/} + ${cliente.id}" class="btn btn-danger"
+                                   th:if="${cliente.hab}">Deshabilitar</a>
+                                <a th:href="@{/clientes/formulario/} + ${cliente.id}" class="btn btn-primary">Editar</a>
+
+                            </div>
                         </div>
 
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-bar"></i>
-                                    Bar Chart Example</div>
-                                <div class="card-body">
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-pie"></i>
-                                    Pie Chart Example</div>
-                                <div class="card-body">
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- /.container-fluid -->
 
                 </div>
-                <!-- /.container-fluid -->
+                <!-- End of Main Content -->
 
-
+                <!-- Footer -->
+                <div th:replace="layout :: footer"></div>
+                <!-- End of Footer -->
 
             </div>
-            <!-- /.content-wrapper -->
+            <!-- End of Content Wrapper -->
 
         </div>
-        <!-- /#wrapper -->
+        <!-- End of Page Wrapper -->
 
-        <div th:replace="layout/layout :: logout"></div>
-        <a th:replace="layout/layout :: scroll"></a>
-        <footer th:replace="layout/layout :: footer"></footer>
+        <div th:replace="layout :: scroll"></div>
+        <div th:replace="layout :: logout_modal"></div>
+
+
+        <script th:replace="layout :: jquery"></script>
+        <script th:replace="layout :: popper-js"></script>
+        <script th:replace="layout :: bootstrap-js"></script>
+        <script th:replace="layout :: jquery-ui"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script th:replace="layout :: bootstrap-bundle"></script>
+        <script th:replace="layout :: jquery-easing"></script>
+        <script th:replace="layout :: sb-admin-2"></script>
+        <script th:replace="layout :: chart"></script>
+        <script th:replace="layout :: chart-area"></script>
+        <script th:replace="layout :: chart-pie"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script th:replace="layout :: datatables-jquery"></script>
+        <script th:replace="layout :: datatables-bootstrap4"></script>
+        <script th:replace="layout :: datatables-demo"></script>
+        <script>
+            $(document).ready(function () {
+                $('#miTabla').dataTable({
+                    "order": [
+                        [1, 'asc']
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Sin resultados",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                        "sPrevious": "Anterior",
+                        "sNext": "Siguiente",
+                        "sSearch": "Buscar",
+                        "sFirst": "Primero",
+                        "sLast": "Último"
+                    },
+                    "columnDefs": [
+                        {"orderable": false, "targets": 'no-sort'}
+                    ]
+                });
+            });
+        </script>
+
     </body>
-
 </html>

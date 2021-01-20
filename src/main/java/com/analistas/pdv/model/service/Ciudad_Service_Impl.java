@@ -6,51 +6,46 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.dao.ICiudad_Dao;
+import com.analistas.pdv.model.dao.IProvincia_Dao;
 import com.analistas.pdv.model.entities.Ciudad;
+import com.analistas.pdv.model.entities.Provincia;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author matia
- */
+
 @Service
 public class Ciudad_Service_Impl implements ICiudad_Service {
 
     @Autowired
     private ICiudad_Dao ciudadDao;
+    
+    @Autowired
+    private IProvincia_Dao provinciaDao;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Ciudad> findAll() {
+    public List<Ciudad> listarCiudades() {
         return ciudadDao.findAll();
     }
 
-    // ESTE NO
     @Override
-    @Transactional(readOnly = true)
-    public List<Ciudad> buscarPorNombre(String term) {
-        return ciudadDao.buscarPorNombre(term);
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public Ciudad findById(Integer id){
+    public Ciudad buscarCiudadPorId(Integer id) {
         return ciudadDao.findById(id).orElse(null);
     }
-    
+
     @Override
-    @Transactional
-    public void save(Ciudad ciudad){
-        ciudadDao.save(ciudad);
-    }
-    
-    @Override
-    @Transactional
-    public void delete(Ciudad ciudad){
-        ciudadDao.delete(ciudad);
+    public List<Ciudad> buscarCiudadPorNombre(String term) {
+        return ciudadDao.buscarPorNombre(term);
     }
 
+    @Override
+    public List<Provincia> listarProvincias() {
+        return provinciaDao.findAll();
+    }
+
+    @Override
+    public Provincia buscarProvinciaPorId(Integer id) {
+        return provinciaDao.findById(id).orElse(null);
+    }
+    
 }

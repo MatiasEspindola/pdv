@@ -5,6 +5,7 @@
  */
 package com.analistas.pdv.model.service;
 
+import com.analistas.pdv.model.entities.Rol;
 import com.analistas.pdv.model.entities.Usuario;
 import java.util.List;
 
@@ -14,12 +15,20 @@ import java.util.List;
  */
 public interface IUsuario_Service {
 
-    public List<Usuario> findAll();
+    public List<Usuario> listarUsuarios();
 
-    public Usuario findById(Integer id);
+    public Usuario buscarUsuarioPorId(Integer id);
 
-    public void save(Usuario usuario);
+    public void guardarUsuario(Usuario usuario);
 
-    public void delete(Usuario usuario);
+    public void borrarUsuario(Usuario usuario);
+    
+    public List<Rol> listarRolesUsuarios();
+
+    public Rol buscarRolUsuarioPorId(Integer id);
+
+    public void guardarRolUsuario(Rol rol);
+
+    public void borrarRolUsuario(Rol rol);
 
 }

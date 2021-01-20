@@ -6,35 +6,19 @@
 package com.analistas.pdv.controller;
 
 import com.analistas.pdv.model.entities.Categoria;
-import com.analistas.pdv.model.entities.Compra;
 import com.analistas.pdv.model.entities.Marca;
-import com.analistas.pdv.model.entities.Metodo_De_Pago;
 import com.analistas.pdv.model.entities.Producto;
 import com.analistas.pdv.model.entities.Proveedor;
-import com.analistas.pdv.model.service.Compra_Service_Impl;
-import com.analistas.pdv.model.service.ICategoria_Service;
-import com.analistas.pdv.model.service.IMarca_Service;
-import com.analistas.pdv.model.service.IMetodoPago_Service;
 import com.analistas.pdv.model.service.IProducto_Service;
 import com.analistas.pdv.model.service.IProveedor_Service;
 import com.analistas.pdv.model.service.IUploadFile_Service;
-import com.analistas.pdv.model.service.MetodoPago_Service_Impl;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -48,67 +32,31 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ *
+ * @author matia
+ */
 @Controller
 @SessionAttributes("producto")
 @RequestMapping("/productos")
 public class productosController {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private IProveedor_Service proveedorService;
 
     @Autowired
-    private IProducto_Service productoServ;
-
-    @Autowired
-    private IProveedor_Service proveedorServ;
-
-    @Autowired
-    private IMarca_Service marcaServ;
-
-    @Autowired
-    private ICategoria_Service categoriaServ;
-
-    @Autowired
-    private IMetodoPago_Service metodopagoServ;
+    private IProducto_Service productoService;
 
     @Autowired
     private IUploadFile_Service upl;
 
-    private static boolean editar;
+    private static String filtrar;
 
-    @Autowired
-    private MetodoPago_Service_Impl metododepagoServ;
+    private List<Producto> productos;
 
-    @Autowired
-    private Compra_Service_Impl compraServ;
+    private Producto producto;
 
-    @GetMapping("/ver_productos")
-    public String productos(Map m) {
-
-        List<Producto> productos = productoServ.findAll();
-
-        m.put("titulo", "Ver Productos");
-        m.put("productos", productos);
-        return "productos/ver_productos";
-    }
-
-    //AUTOCOMPLETE
-    @GetMapping(value = "/cargar_marca/{term}", produces = {"application/json"})
-    public @ResponseBody
-    List<Marca> cargarMarca(@PathVariable String term) {
-        return marcaServ.buscarPorNombre(term);
-    }
-
-    @GetMapping(value = "/cargar_categoria/{term}", produces = {"application/json"})
-    public @ResponseBody
-    List<Categoria> cargarCategoria(@PathVariable String term) {
-        return categoriaServ.buscarPorNombre(term);
-    }
-
-    @GetMapping(value = "/cargar_proveedor/{term}", produces = {"application/json"})
-    public @ResponseBody
-    List<Proveedor> cargarProveedor(@PathVariable String term) {
-        return proveedorServ.buscarPorNombre(term);
-    }
+    private boolean editar;
 
     @GetMapping(value = "/uploads/{filename:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
@@ -127,117 +75,153 @@ public class productosController {
                 .body(recurso);
     }
 
-    @GetMapping("/detalles/{id}")
-    public String detalles_producto(Map m, @PathVariable(value = "id") int id) {
+    @GetMapping("/ver/habilitacion/{id}")
+    public String habilitacion(@PathVariable int id) {
 
-        Producto producto = productoServ.findById(id);
+        if (productoService.buscarProductoPorId(id).isHab()) {
+            productoService.buscarProductoPorId(id).setHab(false);
+        } else {
+            productoService.buscarProductoPorId(id).setHab(true);
+        }
 
-        m.put("titulo", "Detalles");
-        m.put("producto", producto);
-        return "productos/detalles";
+        productoService.guardarProducto(productoService.buscarProductoPorId(id));
+
+        return "redirect:/productos/ver";
     }
 
-    //CRUD
-    @GetMapping("/registrar")
-    public String registrar(Map m) {
+    @GetMapping("/ver/{filtrar}")
+    public String filtrados(@PathVariable String filtrar) {
+
+        this.filtrar = filtrar;
+
+        return "redirect:/productos/ver";
+    }
+
+    @GetMapping("/ver")
+    public String ver(Map m) {
+
+        m.put("titulo", "Ver Productos");
+
+        if (filtrar == null || filtrar.equals("listar_todo")) {
+            productos = productoService.listarProductos();
+        } else if (filtrar.equals("productos_habilitados")) {
+            productos = productoService.buscarProductosHabilitados();
+        } else if (filtrar.equals("productos_deshabilitados")) {
+            productos = productoService.buscarProductosDeshabilitados();
+        }
+
+        m.put("productos", productos);
+
+        return "productos/ver";
+    }
+
+    @GetMapping(value = "/cargar_categoria/{term}", produces = {"application/json"})
+    public @ResponseBody
+    List<Categoria> cargarCategoria(@PathVariable String term) {
+        return productoService.buscarCategoriaProductoPorNombre(term);
+    }
+
+    @GetMapping(value = "/cargar_marca/{term}", produces = {"application/json"})
+    public @ResponseBody
+    List<Marca> cargarMarca(@PathVariable String term) {
+        return productoService.buscarMarcaProductoPorNombre(term);
+    }
+
+    @GetMapping("/formulario")
+    public String agregar(Map m) {
+
+        producto = new Producto();
 
         editar = false;
 
         m.put("editar", editar);
-
-        List<Metodo_De_Pago> metodosdepago = metodopagoServ.findAll();
-        Producto producto = new Producto();
-
-        m.put("inf1", "Buscar Proveedor");
-        m.put("inf2", "Buscar Categoria");
-        m.put("inf3", "Buscar Marca");
-        m.put("inf_img", "Buscar Imagen: ");
-        m.put("titulo", "Registrar Producto");
         m.put("producto", producto);
-        m.put("metodosdepago", metodosdepago);
-        return "productos/registrar";
+
+        m.put("titulo", "Añadir Producto");
+
+        return "productos/formulario";
     }
 
-    @GetMapping(value = "/editar/{id}")
-    public String editar(Map m, @PathVariable(value = "id") int id) {
-        Producto producto = null;
+    @GetMapping("/formulario/{id}")
+    public String modificar(@PathVariable int id, Map m) {
 
-        if (id > 0) {
-            producto = productoServ.findById(id);
-            if (producto == null) {
-                return "redirect:/clientes/ver_clientes";
+        editar = true;
+
+        producto = productoService.buscarProductoPorId(id);
+
+        m.put("editar", editar);
+        m.put("producto", producto);
+        m.put("categoria", producto.getCategoria().getCategoria());
+        m.put("marca", producto.getMarca().getMarca());
+
+        m.put("titulo", "Editar Datos del Producto");
+
+        return "productos/formulario";
+    }
+
+    @PostMapping("/formulario")
+    public String guardar(@Valid Producto producto, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
+
+        if (comprobarDuplicacionDeDatos(producto, editar)) {
+            //Mensaje de error
+            flash.addFlashAttribute("duplicacion", "Ya se encuentra registrado el producto "
+                    + producto.getNombre() + "(" + producto.getModelo() + ")");
+            if (editar) {
+                return "redirect:/productos/formulario/" + producto.getId();
+            } else {
+                return "redirect:/productos/formulario";
             }
-
-            editar = true;
-
-            m.put("editar", editar);
-            m.put("inf1", producto.getProveedor().getNombre());
-            m.put("inf2", producto.getCategoria().getCategoria());
-            m.put("inf3", producto.getMarca().getMarca());
-            m.put("inf_img", "Cambiar Imagen: ");
 
         } else {
-            return "redirect:/productos/ver_productos";
+
+            if (!foto.isEmpty()) {
+                if (producto.getId() > 0 && producto.getFoto() != null
+                        && producto.getFoto().length() > 0) {
+                    upl.delete(producto.getFoto());
+                }
+                String uniqueFilename = null;
+
+                try {
+                    uniqueFilename = upl.copy(foto);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                producto.setFoto(uniqueFilename);
+            }
+
+            productoService.guardarProducto(producto);
+
         }
 
-        m.put("titulo", "Editar Producto");
-        m.put("producto", producto);
-        return "productos/registrar";
+        return "redirect:/productos/ver";
     }
 
-    @PostMapping("/registrar")
-    public String guardar(@Valid Producto producto, Map m, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
+    public boolean comprobarDuplicacionDeDatos(Producto producto, boolean editar) {
+        productos = productoService.listarProductos();
 
-        if (!foto.isEmpty()) {
-            if (producto.getId() > 0 && producto.getFoto() != null
-                    && producto.getFoto().length() > 0) {
-                upl.delete(producto.getFoto());
-            }
-            String uniqueFilename = null;
-
-            try {
-                uniqueFilename = upl.copy(foto);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            producto.setFoto(uniqueFilename);
-        }
-
-        List<Producto> productos = productoServ.findAll();
-
-        for (int i = 0; i < productos.size(); i++) {
-            if (producto.getNombre().equals(productos.get(i).getNombre()) && editar == false) {
-                if (producto.getModelo().equals(productos.get(i).getModelo())) {
-                    flash.addFlashAttribute("existente", "¡El producto " + producto.getNombre()+ " - " + producto.getModelo() + " ya existe!");
-                    return "redirect:/productos/ver_productos";
+        if (!productos.isEmpty()) {
+            if (editar) {
+                for (Producto p : productos) {
+                    if (!(p.getId() == producto.getId())) {
+                        if (p.getNombre().equals(producto.getNombre()) && p.getModelo().equals(producto.getModelo())) {
+                            System.out.println("¡Duplicacion de datos en editar!");
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                for (Producto p : productos) {
+                    if (p.getNombre().equals(producto.getNombre()) && p.getModelo().equals(producto.getModelo())) {
+                        System.out.println("¡Duplicacion de datos en agregar!");
+                        return true;
+                    }
                 }
             }
         }
 
-        if (editar) {
-            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
-        } else {
-            flash.addFlashAttribute("nuevo", "¡Producto agregado con éxito!");
-        }
-
-        productoServ.save(producto);
-
-        return "redirect:/productos/ver_productos";
-    }
-
-    @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes flash) {
-
-        if (id > 0) {
-            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
-            
-            Producto producto = productoServ.findById(id);
-            productoServ.delete(producto);
-        }
-
-        return "redirect:/productos/ver_productos";
+        return false;
     }
 
 }

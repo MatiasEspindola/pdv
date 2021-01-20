@@ -16,15 +16,18 @@ public interface IProveedor_Service {
 
     public List<Proveedor> findAll();
 
+    public List<Proveedor> buscarHabilitados();
+
+    public List<Proveedor> buscarDeshabilitados();
+
     public Proveedor findById(Integer id);
 
     public void save(Proveedor proveedor);
 
     public void delete(Proveedor proveedor);
 
-    //nahuelProgramador
     public Proveedor findOne(Integer id);
-    
+
     public List<Proveedor> buscarPorNombre(String term);
 
 }

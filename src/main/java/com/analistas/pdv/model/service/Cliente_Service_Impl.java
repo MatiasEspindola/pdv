@@ -6,17 +6,13 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.dao.ICliente_Dao;
-import com.analistas.pdv.model.entities.Ciudad;
 import com.analistas.pdv.model.entities.Cliente;
+import com.analistas.pdv.model.entities.Persona;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author nahuel
- */
 @Service
 public class Cliente_Service_Impl implements ICliente_Service {
 
@@ -25,32 +21,48 @@ public class Cliente_Service_Impl implements ICliente_Service {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Cliente> findAll() {
+    public List<Cliente> listarClientes() {
         return clienteDao.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Cliente findById(Integer id) {
+    public Cliente buscarClientePorId(Integer id) {
         return clienteDao.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
-    public void save(Cliente cliente) {
+    public void guardarCliente(Cliente cliente) {
         clienteDao.save(cliente);
     }
 
     @Override
     @Transactional
-    public void delete(Cliente cliente) {
+    public void borrarCliente(Cliente cliente) {
         clienteDao.delete(cliente);
     }
 
     @Override
-    @Transactional
-    public void uploadCliente(Ciudad ciudad) {
-        clienteDao.uploadCliente(ciudad);
+    @Transactional(readOnly = true)
+    public List<Cliente> buscarHabilitados() {
+        return clienteDao.buscarHabilitados();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Cliente> buscarDeshabilitados() {
+        return clienteDao.buscarDeshabilitados();
+    }
+
+    @Override
+    public List<Cliente> buscarCliente(String term) {
+        return clienteDao.buscarCliente(term);
+    }
+
+    @Override
+    public Cliente buscarPersonaCliente(Persona persona) {
+        return clienteDao.buscarPersonaCliente(persona);
     }
 
 }

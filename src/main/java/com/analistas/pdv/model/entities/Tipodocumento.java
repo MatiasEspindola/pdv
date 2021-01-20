@@ -29,15 +29,14 @@ public class Tipodocumento implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_id_tipo")
+    @Column(name = "pk_id_tipo_documento")
     private int id;
 
     private String tipo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tipo")
-    @JsonManagedReference
     @JsonIgnore
-    private List<Cliente> clientes;
+    private List<Persona> personas;
 
     public int getId() {
         return id;
@@ -55,12 +54,12 @@ public class Tipodocumento implements Serializable {
         this.tipo = tipo;
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
+    public List<Persona> getPersonas() {
+        return personas;
     }
 
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
     }
 
 }

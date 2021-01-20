@@ -1,0 +1,17 @@
+
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+
+* html .ui-autocomplete {
+    height: 100px;
+}
+
+@media screen and (max-height: 450px) {
+                .ui-autocomplete {
+                    font-size: 12px;
+                }
+}

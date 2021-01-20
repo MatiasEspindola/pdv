@@ -7,22 +7,25 @@ package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.entities.Ciudad;
 import com.analistas.pdv.model.entities.Cliente;
+import com.analistas.pdv.model.entities.Persona;
 import java.util.List;
 
-/**
- *
- * @author nahuel
- */
 public interface ICliente_Service {
-    
-    public List<Cliente> findAll();
 
-    public Cliente findById(Integer id);
+    public List<Cliente> buscarCliente(String term);
 
-    public void save(Cliente cliente);
+    public List<Cliente> buscarHabilitados();
 
-    public void delete(Cliente cliente);
+    public List<Cliente> buscarDeshabilitados();
+
+    public List<Cliente> listarClientes();
+
+    public Cliente buscarClientePorId(Integer id);
+
+    public void guardarCliente(Cliente cliente);
+
+    public void borrarCliente(Cliente cliente);
     
-    public void uploadCliente(Ciudad ciudad);
-    
+    public Cliente buscarPersonaCliente(Persona persona);
+
 }

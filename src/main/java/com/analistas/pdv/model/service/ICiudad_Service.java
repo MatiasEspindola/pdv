@@ -6,6 +6,7 @@
 package com.analistas.pdv.model.service;
 
 import com.analistas.pdv.model.entities.Ciudad;
+import com.analistas.pdv.model.entities.Provincia;
 import java.util.List;
 
 /**
@@ -14,16 +15,14 @@ import java.util.List;
  */
 public interface ICiudad_Service {
 
-    public List<Ciudad> findAll();
+    public List<Ciudad> listarCiudades();
 
-    public Ciudad findById(Integer id);
+    public Ciudad buscarCiudadPorId(Integer id);
 
-    public void save(Ciudad ciudad);
-
-    public void delete(Ciudad ciudad);
-
-    public List<Ciudad> buscarPorNombre(String term);
+    public List<Ciudad> buscarCiudadPorNombre(String term);
     
-    
+    public List<Provincia> listarProvincias();
+
+    public Provincia buscarProvinciaPorId(Integer id);
 
 }

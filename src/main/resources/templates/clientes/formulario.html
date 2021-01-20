@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!doctype html>
+<html lang="en">
+    <head th:replace="layout :: head"> </head>
+    <body id="page-top">
+
+
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div th:replace="layout :: sidebar"></div>
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <!-- Topbar -->
+                    <div th:replace="layout :: topbar"></div>
+                    <!-- End of Topbar -->
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${duplicacion != null}">
+                                    <strong>¡Error!</strong> Duplicación de datos. <br>
+                                    <span th:text="${duplicacion}"></span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form th:action="@{/clientes/formulario}" th:object="${persona}" style="padding: 10px;" method="post">
+                                    <div class="form-row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="nombre">Nombre (*)</label>
+                                            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="apellido">Apellido (*)</label>
+                                            <input type="text" class="form-control" id="apellido" th:field="*{apellido}" required>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="documento">Documento (*)</label>
+                                            <input type="text" class="form-control" id="documento" th:field="*{doc}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="tipo_documento">Tipo de Documento (*)</label>
+                                            <select class="custom-select" id="tipo_documento" th:field="*{tipo}" required>
+                                                <option selected disabled value="">Seleccione...</option>
+                                                <option th:each="td : ${tipos_documentos}" th:text="${td.tipo}" th:value="${td.id}"></option>
+                                            </select>
+                                            <br><br>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="fecha_nacimiento">Fecha de Nacimiento (*)</label>
+                                            <input type="date" class="form-control" id="fecha_nacimiento" th:field="*{nacimiento}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="genero">Género (*)</label>
+                                            <div class="form-group">
+                                                <div class="form-check form-check-inline">
+                                                    <i class="fas fa-mars" style="margin-right:5px"></i> Masculino
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" style="margin-left:5px" id="inlineRadio1" value="M" th:field="*{genero}" required>
+                                                    <i class="fas fa-venus" style="margin-right:5px"></i> Femenino
+                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" style="margin-left:5px" id="inlineRadio1" value="F" th:field="*{genero}" required>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="ciudad">Ciudad (*)</label>
+                                            <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad"
+                                                   th:if="${editar}" th:value="${ciudad}" required>
+                                            <input type="text" class="form-control" id="buscar_ciudad" name="buscar_ciudad"
+                                                   th:if="${editar} == false" required>
+                                            <input type="hidden" id="ingresar_ciudad" name="ingresar_ciudad" th:field="*{ciudad}" required>
+                                            <span style="color: blue;">Campo Autocompletable</span>
+                                            <br><br>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+                                            <label for="Calle">Calle (*)</label>
+                                            <input type="text" class="form-control" id="calle" th:field="*{calle}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+                                            <label for="numero">Número (*)</label>
+                                            <input type="text" class="form-control" id="numero" th:field="*{numero}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+                                            <label for="piso">Piso (*)</label>
+                                            <input type="text" class="form-control" id="piso" th:field="*{piso}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+                                            <label for="dpto">Dpto (*)</label>
+                                            <input type="text" class="form-control" id="dpto" th:field="*{dpto}" required>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="email">Email (*)</label>
+                                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="telefono1">Tel1 (*)</label>
+                                            <input type="text" class="form-control" id="telefono1" name="telefono1"
+                                                   th:if="${editar}" th:value="${telefono1}" required>
+                                            <input type="text" class="form-control" id="telefono1" name="telefono1"
+                                                   th:if="${editar == false}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="telefono2">Tel2</label>
+                                            <input type="text" class="form-control" name="telefono2" id="telefono2" 
+                                                   th:if="${editar}" th:value="${telefono2}" required>
+                                            <input type="text" class="form-control" id="telefono2" name="telefono2"
+                                                   th:if="${editar == false}" required>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Guardar</button> <a class="btn btn-danger" th:href="@{/clientes/ver}">Cancelar</a>
+                                    <br><br>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <div th:replace="layout :: footer"></div>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <div th:replace="layout :: scroll"></div>
+        <div th:replace="layout :: logout_modal"></div>
+
+
+        <script th:replace="layout :: jquery"></script>
+        <script th:replace="layout :: popper-js"></script>
+        <script th:replace="layout :: bootstrap-js"></script>
+        <script th:replace="layout :: jquery-ui"></script>
+        <script th:replace="clientes/autocomplete-ciudad :: javascript"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script th:replace="layout :: bootstrap-bundle"></script>
+        <script th:replace="layout :: jquery-easing"></script>
+        <script th:replace="layout :: sb-admin-2"></script>
+        <script th:replace="layout :: chart"></script>
+        <script th:replace="layout :: chart-area"></script>
+        <script th:replace="layout :: chart-pie"></script>
+        <script th:replace="layout :: eventos"></script>
+
+    </body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!doctype html>
+<html lang="en">
+    <head th:replace="layout :: head"> </head>
+    <body id="page-top">
+
+
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div th:replace="layout :: sidebar"></div>
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <!-- Topbar -->
+                    <div th:replace="layout :: topbar"></div>
+                    <!-- End of Topbar -->
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${duplicacion != null}">
+                                    <strong>¡Error!</strong> Duplicación de datos. <br>
+                                    <span th:text="${duplicacion}"></span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form th:action="@{/productos/formulario}" enctype="multipart/form-data" th:object="${producto}" style="padding: 10px;" method="post">
+                                    <div class="form-row">
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <div class="custom-file text-center">
+                                                <div class="imagePreview" style="max-width: 45%;"></div>
+                                                <label for="file"></label>
+                                                <input type="file" name="file" class="form-control-file" id="file" onchange="previewImage(this, [256], 4);">
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="Producto">Producto (*)</label>
+                                            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="Modelo">Modelo (*)</label>
+                                            <input type="text" class="form-control" id="modelo" th:field="*{modelo}" required>
+                                            <br>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                            <label for="precio">Precio (*)</label>
+                                            <input type="number" class="form-control" id="precio" th:field="*{precio}" required>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">                               
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="ciudad">Categoria (*)</label>
+                                            <input type="text" class="form-control" id="buscar_categoria" name="buscar_categoria"
+                                                   th:if="${editar}" th:value="${categoria}" required>
+                                            <input type="text" class="form-control" id="buscar_categoria" name="buscar_categoria"
+                                                   th:if="${editar} == false" required>
+                                            <input type="hidden" id="ingresar_categoria" name="ingresar_categoria" th:field="*{categoria}" required>
+                                            <span style="color: blue;">Campo Autocompletable</span>
+                                            <br><br>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            <label for="ciudad">Marca (*)</label>
+                                            <input type="text" class="form-control" id="buscar_marca" name="buscar_marca"
+                                                   th:if="${editar}" th:value="${marca}" required>
+                                            <input type="text" class="form-control" id="buscar_marca" name="buscar_marca"
+                                                   th:if="${editar} == false" required>
+                                            <input type="hidden" id="ingresar_marca" name="ingresar_marca" th:field="*{marca}" required>
+                                            <span style="color: blue;">Campo Autocompletable</span>
+                                            <br><br>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Guardar</button> <a class="btn btn-danger" th:href="@{/productos/ver}">Cancelar</a>
+                                    <br><br>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <div th:replace="layout :: footer"></div>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <div th:replace="layout :: scroll"></div>
+        <div th:replace="layout :: logout_modal"></div>
+
+
+        <script th:replace="layout :: jquery"></script>
+        <script th:replace="layout :: popper-js"></script>
+        <script th:replace="layout :: bootstrap-js"></script>
+        <script th:replace="layout :: jquery-ui"></script>
+        <script th:replace="productos/autocomplete :: javascript-ac-proveedor"></script>
+        <script th:replace="productos/autocomplete :: javascript-ac-categoria"></script>
+        <script th:replace="productos/autocomplete :: javascript-ac-marca"></script>
+        <script th:replace="layout :: bootstrap-bundle"></script>
+        <script th:replace="layout :: jquery-easing"></script>
+        <script th:replace="layout :: sb-admin-2"></script>
+        <script th:replace="layout :: chart"></script>
+        <script th:replace="layout :: chart-area"></script>
+        <script th:replace="layout :: chart-pie"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script src="/js/html5.image.preview.min.js" type="text/javascript"></script>
+    </body>
+</html>

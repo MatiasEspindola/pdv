@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!doctype html>
+<html lang="en">
+    <head th:replace="layout :: head"> </head>
+    <body id="page-top">
+
+
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div th:replace="layout :: sidebar"></div>
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <!-- Topbar -->
+                    <div th:replace="layout :: topbar"></div>
+                    <!-- End of Topbar -->
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                        <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                            </div>
+                            <div class="card-body">
+
+                                <a class="btn btn-primary btn-sm" th:href="@{/clientes/formulario}" role="button"
+                                   >Añadir Clientes</a>
+
+                                <a class="btn btn-success btn-sm" th:href="@{/clientes/ver/} + 'clientes_habilitados'" role="button"
+                                   >Clientes Habilitados</a>
+                                <a class="btn btn-danger btn-sm" th:href="@{/clientes/ver/} + 'clientes_deshabilitados'" role="button"
+                                   >Clientes Deshabilitados</a>
+                                <a class="btn btn-secondary btn-sm" th:href="@{/clientes/ver/} + 'listar_todo'" role="button"
+                                   >Filtrar todo</a>
+
+                                <br><br> 
+                                <div class="table-responsive">
+                                    <table class="table table-bordered text-center" id="miTabla" width="100%" cellspacing="0">
+                                        <thead style="background: #4e73df; color: white;">
+                                            <tr>
+                                                <th scope="col" class="no-sort"></th>
+                                                <th scope="col">Cliente</th>
+                                                <th scope="col">Dni</th>
+                                                <th scope="col">Correo</th>
+                                                <th scope="col">Teléfono/s</th>
+                                                <th scope="col">Ciudad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="cliente : ${clientes}">
+                                                <td><a href="#" class="btn btn-info"><i class="far fa-user"></i></a></td>
+                                                <td th:text="${cliente.persona.apellido} + ', ' + ${cliente.persona.nombre}" 
+                                                    th:classappend="${cliente.hab} ? text-success : text-danger"></td>
+                                                <td th:text="${cliente.persona.doc}"></td>
+                                                <td th:text="${cliente.persona.email}"></td>
+                                                <td th:text="${cliente.telefono_cliente[0].tel1} + ', ' + ${cliente.telefono_cliente[0].tel2}"></td>
+                                                <td th:text="${cliente.persona.ciudad.provincia.nombre} + ', ' + ${cliente.persona.ciudad.ciudad}"></td>
+
+                                                <!-- Modal -->
+                                        <div class="modal fade bd-example-modal-lg" th:id="'modal_cliente'+${cliente.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-center" id="exampleModalLabel">Detalles Cliente</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-12 text-left">
+                                                                <span><b>Cliente: </b><em th:text="${cliente.persona.apellido} + ', ' + ${cliente.persona.nombre}"></em></span>
+                                                                <br><br>
+                                                                <span><b>Documento: </b><em th:text="${cliente.persona.doc}"></em></span><br>
+                                                                <span><b>Email: </b><em th:text="${cliente.persona.email}"></em></span><br>
+                                                                <span><b>Teléfono/s: </b><em th:text="${cliente.telefono_cliente[0].tel1} + ', ' + ${cliente.telefono_cliente[0].tel2}"></em></span><br>
+                                                                <span><b>Ciudad: </b><em th:text="${cliente.persona.ciudad.provincia.nombre} + ', ' + ${cliente.persona.ciudad.ciudad}"></em></span>
+                                                                <br><br>
+                                                                <span><b>Fecha de alta: </b><em th:text="${cliente.alta}"></em></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                        <a th:href="@{/clientes/ver/habilitacion/} + ${cliente.id}" class="btn btn-success"
+                                                           th:if="${cliente.hab == false}">Habilitar</a>
+                                                        <a th:href="@{/clientes/ver/habilitacion/} + ${cliente.id}" class="btn btn-danger"
+                                                           th:if="${cliente.hab}">Deshabilitar</a>
+                                                        <a th:href="@{/clientes/formulario/} + ${cliente.id}" class="btn btn-primary">Editar</a>
+
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <p><b class="text-success">* Verde: </b> Cliente Habilitado </p>
+                                    <p><b class="text-danger">* Rojo: </b> Cliente Deshabilitado </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <div th:replace="layout :: footer"></div>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <div th:replace="layout :: scroll"></div>
+        <div th:replace="layout :: logout_modal"></div>
+
+
+        <script th:replace="layout :: jquery"></script>
+        <script th:replace="layout :: popper-js"></script>
+        <script th:replace="layout :: bootstrap-js"></script>
+        <script th:replace="layout :: jquery-ui"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script th:replace="layout :: bootstrap-bundle"></script>
+        <script th:replace="layout :: jquery-easing"></script>
+        <script th:replace="layout :: sb-admin-2"></script>
+        <script th:replace="layout :: chart"></script>
+        <script th:replace="layout :: chart-area"></script>
+        <script th:replace="layout :: chart-pie"></script>
+        <script th:replace="layout :: eventos"></script>
+        <script th:replace="layout :: datatables-jquery"></script>
+        <script th:replace="layout :: datatables-bootstrap4"></script>
+        <script th:replace="layout :: datatables-demo"></script>
+        <script>
+            $(document).ready(function () {
+                $('#miTabla').dataTable({
+                    "order": [
+                        [1, 'asc']
+                    ],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "Sin resultados",
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                        "sPrevious": "Anterior",
+                        "sNext": "Siguiente",
+                        "sSearch": "Buscar",
+                        "sFirst": "Primero",
+                        "sLast": "Último"
+                    },
+                    "columnDefs": [
+                        {"orderable": false, "targets": 'no-sort'}
+                    ]
+                });
+            });
+        </script>
+
+    </body>
+</html>

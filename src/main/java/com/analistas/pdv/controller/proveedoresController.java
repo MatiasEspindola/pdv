@@ -7,20 +7,17 @@ package com.analistas.pdv.controller;
 
 import com.analistas.pdv.model.entities.Ciudad;
 import com.analistas.pdv.model.entities.Proveedor;
-import com.analistas.pdv.model.service.Ciudad_Service_Impl;
+import com.analistas.pdv.model.entities.Telefono_Proveedor;
+import com.analistas.pdv.model.service.ICiudad_Service;
 import com.analistas.pdv.model.service.IProveedor_Service;
+import com.analistas.pdv.model.service.ITelefono_Service;
 import com.analistas.pdv.model.service.IUploadFile_Service;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.validation.Valid;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -38,41 +35,38 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
- * @author nahuel
+ * @author matia
  */
 @Controller
 @SessionAttributes("proveedor")
 @RequestMapping("/proveedores")
 public class proveedoresController {
 
-    private final org.slf4j.Logger log = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private IProveedor_Service proveedorService;
+
+    @Autowired
+    private ITelefono_Service telefonoService;
+
+    @Autowired
+    private ICiudad_Service ciudadService;
 
     @Autowired
     private IUploadFile_Service upl;
 
-    @Autowired
-    private IProveedor_Service proveedorServ;
+    private Telefono_Proveedor telefono_proveedor;
 
-    @Autowired
-    private Ciudad_Service_Impl ciudadServ;
+    private List<Proveedor> proveedores;
 
-    private static boolean editar;
+    private List<Telefono_Proveedor> telefonos_proveedores;
 
-    @GetMapping("/ver_proveedores")
-    public String proveedores(Map m) {
+    private Proveedor proveedor;
 
-        List<Proveedor> proveedores = proveedorServ.findAll();
+    private Date fecha;
 
-        m.put("titulo", "Ver Proveedores");
-        m.put("proveedores", proveedores);
-        return "proveedores/ver_proveedores";
-    }
+    private boolean editar;
 
-    @GetMapping(value = "/cargar_ciudad/{term}", produces = {"application/json"})
-    public @ResponseBody
-    List<Ciudad> cargarCiudadProveedor(@PathVariable String term) {
-        return ciudadServ.buscarPorNombre(term);
-    }
+    private static String filtrar;
 
     @GetMapping(value = "/uploads/{filename:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
@@ -91,113 +85,178 @@ public class proveedoresController {
                 .body(recurso);
     }
 
-    @GetMapping("/detalles/{id}")
-    public String detalles_proveedor(Map m, @PathVariable(value = "id") int id) {
+    @GetMapping("/ver/habilitacion/{id}")
+    public String habilitacion(@PathVariable int id) {
 
-        Proveedor proveedor = proveedorServ.findById(id);
+        if (proveedorService.findById(id).isHab()) {
+            proveedorService.findById(id).setHab(false);
+        } else {
+            proveedorService.findById(id).setHab(true);
+        }
 
-        m.put("titulo", "Detalles");
-        m.put("proveedor", proveedor);
+        proveedorService.save(proveedorService.findById(id));
 
-        return "proveedores/detalles";
+        return "redirect:/proveedores/ver";
     }
 
-    @GetMapping(value = "/registrar")
-    public String registrar(Map m) {
+    @GetMapping("/ver/{filtrar}")
+    public String filtrados(@PathVariable String filtrar) {
+
+        this.filtrar = filtrar;
+
+        return "redirect:/proveedores/ver";
+    }
+
+    @GetMapping("/ver")
+    public String ver(Map m) {
+
+        m.put("titulo", "Ver Proveedores");
+
+        if (filtrar == null || filtrar.equals("listar_todo")) {
+            proveedores = proveedorService.findAll();
+        } else if (filtrar.equals("proveedores_habilitados")) {
+            proveedores = proveedorService.buscarHabilitados();
+        } else if (filtrar.equals("proveedores_deshabilitados")) {
+            proveedores = proveedorService.buscarDeshabilitados();
+        }
+
+        for (Proveedor proveedor : proveedores) {
+            telefono_proveedor = telefonoService.buscarTelefonoProveedor(proveedor);
+            m.put("telefono1", telefono_proveedor.getTel1());
+            m.put("telefono2", telefono_proveedor.getTel2());
+        }
+
+        m.put("proveedores", proveedores);
+
+        return "proveedores/ver";
+    }
+
+    @GetMapping(value = "/cargar_ciudad/{term}", produces = {"application/json"})
+    public @ResponseBody
+    List<Ciudad> cargarCiudad(@PathVariable String term) {
+        return ciudadService.buscarCiudadPorNombre(term);
+    }
+
+    @GetMapping("/formulario")
+    public String agregar(Map m) {
+
+        proveedor = new Proveedor();
+
+        telefono_proveedor = new Telefono_Proveedor();
+
+        fecha = new Date();
 
         editar = false;
 
         m.put("editar", editar);
-
-        Proveedor proveedor = new Proveedor();
-
-        m.put("inf", "Buscar Ciudad");
-        m.put("inf_img", "Buscar Imagen: ");
-        m.put("titulo", "Registrar Proveedor");
         m.put("proveedor", proveedor);
-        return "proveedores/registrar";
 
+        m.put("titulo", "Añadir Proveedor");
+
+        return "proveedores/formulario";
     }
 
-    @GetMapping("/editar/{id}")
-    public String editar(@PathVariable(value = "id") int id, Map m) {
-        Proveedor proveedor = null;
+    @GetMapping("/formulario/{id}")
+    public String modificar(@PathVariable int id, Map m) {
 
-        if (id > 0) {
-            proveedor = proveedorServ.findById(id);
-            if (proveedor == null) {
-                return "redirect:/proveedores/ver_proveedores";
+        editar = true;
+
+        proveedor = proveedorService.findById(id);
+
+        telefono_proveedor = telefonoService.buscarTelefonoProveedor(proveedor);
+
+        m.put("editar", editar);
+        m.put("proveedor", proveedor);
+        m.put("datos_ciudad", proveedor.getCiudad().getCp() + ", " + proveedor.getCiudad().getCiudad() + ", "
+                + proveedor.getCiudad().getProvincia().getNombre());
+        m.put("ciudad", proveedor.getCiudad());
+
+        m.put("telefono1", telefono_proveedor.getTel1());
+        m.put("telefono2", telefono_proveedor.getTel2());
+
+        m.put("titulo", "Editar Datos del Proveedor");
+
+        return "proveedores/formulario";
+    }
+
+    @PostMapping("/formulario")
+    public String guardar(@Valid Proveedor proveedor, @RequestParam(name = "telefono1") String tel1,
+            @RequestParam(name = "telefono2") String tel2, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
+
+        if (comprobarDuplicacionDeDatos(proveedor, editar)) {
+            //Mensaje de error
+            flash.addFlashAttribute("duplicacion", "Ya se encuentra registrado el proveedor "
+                    + proveedor.getNombre() + "(" + proveedor.getCiudad().getCiudad() + ")");
+            if (editar) {
+                return "redirect:/proveedores/formulario/" + proveedor.getId();
+            } else {
+                return "redirect:/proveedores/formulario";
             }
-
-            editar = true;
-
-            m.put("editar", editar);
-            m.put("inf", proveedor.getCiudad().getCp() + ", " + proveedor.getCiudad().getCiudad() + ", " + proveedor.getCiudad().getProvincia().getProvincia());
-            m.put("inf_img", "Cambiar Imagen: ");
 
         } else {
-            return "redirect:/proveedores/ver_proveedores";
+
+            if (!foto.isEmpty()) {
+                if (proveedor.getId() > 0 && proveedor.getFoto() != null
+                        && proveedor.getFoto().length() > 0) {
+                    upl.delete(proveedor.getFoto());
+                }
+                String uniqueFilename = null;
+
+                try {
+                    uniqueFilename = upl.copy(foto);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                proveedor.setFoto(uniqueFilename);
+            }
+
+            if (!editar) {
+                telefono_proveedor.setTel1(tel1);
+                telefono_proveedor.setTel2(tel2);
+
+                proveedor.setAlta(fecha);
+                proveedor.setHab(true);
+
+                telefono_proveedor.setProveedor(proveedor);
+            } else {
+                telefono_proveedor.setTel1(tel1);
+                telefono_proveedor.setTel2(tel2);
+            }
+
+            proveedorService.save(proveedor);
+            telefonoService.guardarTelefonoProveedor(telefono_proveedor);
+
         }
 
-        m.put("titulo", "Editar Proveedor");
-        m.put("proveedor", proveedor);
-        return "proveedores/registrar";
+        return "redirect:/proveedores/ver";
     }
 
-    @PostMapping("/registrar")
-    public String guardar(@Valid Proveedor proveedor, Map m, @RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
+    public boolean comprobarDuplicacionDeDatos(Proveedor proveedor, boolean editar) {
+        proveedores = proveedorService.findAll();
 
-        if (!foto.isEmpty()) {
-            if (proveedor.getId() > 0 && proveedor.getFoto() != null
-                    && proveedor.getFoto().length() > 0) {
-                upl.delete(proveedor.getFoto());
-            }
-            String uniqueFilename = null;
-
-            try {
-                uniqueFilename = upl.copy(foto);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            proveedor.setFoto(uniqueFilename);
-        }
-
-        List<Proveedor> proveedores = proveedorServ.findAll();
-
-        for (int i = 0; i < proveedores.size(); i++) {
-            if (proveedor.getNombre().equals(proveedores.get(i).getNombre()) && editar == false) {
-                if (proveedor.getCiudad().equals(proveedores.get(i).getCiudad())) {
-                    flash.addFlashAttribute("existente", "¡El proveedor " + proveedor.getNombre() + " - " + proveedor.getCiudad().getCiudad() + " ya existe!");
-                    return "redirect:/proveedores/ver_proveedores";
+        if (!proveedores.isEmpty()) {
+            if (editar) {
+                for (Proveedor p : proveedores) {
+                    if (!(p.getId() == proveedor.getId())) {
+                        if (p.getNombre().equals(proveedor.getNombre()) && p.getCiudad().equals(proveedor.getCiudad())) {
+                            System.out.println("¡Duplicacion de datos en editar!");
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                for (Proveedor p : proveedores) {
+                    if (p.getNombre().equals(proveedor.getNombre()) && p.getCiudad().equals(proveedor.getCiudad())) {
+                        System.out.println("¡Duplicacion de datos en agregar!");
+                        return true;
+                    }
                 }
             }
         }
 
-        if (editar) {
-            flash.addFlashAttribute("editar", "¡Datos modificados con éxito!");
-        } else {
-            flash.addFlashAttribute("nuevo", "¡Proveedor agregado con éxito!");
-        }
-
-        proveedorServ.save(proveedor);
-        return "redirect:/proveedores/ver_proveedores";
-    }
-
-    @RequestMapping(value = "/borrar/{id}")
-    public String borrar(@PathVariable(value = "id") int id, RedirectAttributes mensaje, RedirectAttributes flash) {
-
-        if (id > 0) {
-            
-            flash.addFlashAttribute("eliminar", "Se ha eliminado con éxito");
-            
-            Proveedor proveedor = proveedorServ.findById(id);
-            proveedorServ.delete(proveedor);
-        }
-
-        //mensaje.addFlashAttribute("success", "Proveedor Eliminado con Exito");
-        return "redirect:/proveedores/ver_proveedores";
+        return false;
     }
 
 }

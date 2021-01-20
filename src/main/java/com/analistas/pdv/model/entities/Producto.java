@@ -24,11 +24,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
- * @author nahuel
+ * @author matias
  */
 @Entity
 @Table(name = "productos")
@@ -38,11 +40,21 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk_id_prod")
     private int id;
+
+    @NotEmpty
     private String nombre;
+
+    @NotEmpty
     private String modelo;
-    private Double precio;
+
+    @NotNull
+    private double precio;
+
     private int stock;
+
     private String foto;
+
+    private boolean hab;
 
 //    @Temporal(TemporalType.DATE)
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -50,26 +62,26 @@ public class Producto implements Serializable {
 //
 //    @Temporal(TemporalType.DATE)
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date fecha_vencimiento;
-    @ManyToOne
-    @JoinColumn(name = "fk_id_prov", referencedColumnName = "pk_id_prov")
-    private Proveedor proveedor;
+//    private Date fecha_vencimiento;ç
+    
 
     @ManyToOne
     @JoinColumn(name = "fk_id_mar", referencedColumnName = "pk_id_mar")
+    @NotNull
     private Marca marca;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_cat", referencedColumnName = "pk_id_cat")
+    @NotNull
     private Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "producto")
     @JsonIgnore
-    private List<Compra> compras;
+    private List<Item_Compra> items_compras;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "producto")
     @JsonIgnore
-    private List<Venta> ventas;
+    private List<Item_Venta> item_ventas;
 
     public int getId() {
         return id;
@@ -87,11 +99,11 @@ public class Producto implements Serializable {
         this.nombre = nombre;
     }
 
-    public Double getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
@@ -103,28 +115,20 @@ public class Producto implements Serializable {
         this.stock = stock;
     }
 
-    public Proveedor getProveedor() {
-        return proveedor;
+    public List<Item_Compra> getItems_compras() {
+        return items_compras;
     }
 
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    public void setItems_compras(List<Item_Compra> items_compras) {
+        this.items_compras = items_compras;
     }
 
-    public List<Compra> getCompras() {
-        return compras;
+    public List<Item_Venta> getItem_ventas() {
+        return item_ventas;
     }
 
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
-    }
-
-    public List<Venta> getVentas() {
-        return ventas;
-    }
-
-    public void setVentas(List<Venta> ventas) {
-        this.ventas = ventas;
+    public void setItem_ventas(List<Item_Venta> item_ventas) {
+        this.item_ventas = item_ventas;
     }
 
     public Marca getMarca() {
@@ -172,6 +176,14 @@ public class Producto implements Serializable {
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
+    }
+
+    public boolean isHab() {
+        return hab;
+    }
+
+    public void setHab(boolean hab) {
+        this.hab = hab;
     }
 
 }

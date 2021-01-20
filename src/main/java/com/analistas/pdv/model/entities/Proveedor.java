@@ -5,11 +5,10 @@
  */
 package com.analistas.pdv.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,9 +21,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -40,27 +39,37 @@ public class Proveedor implements Serializable {
     @Column(name = "pk_id_prov")
     private int id;
 
-    @NotEmpty
     private String nombre;
-    @NotEmpty
-    private String direccion;
-    @NotEmpty
-    private String tel;
-    @NotEmpty
-    private String cel;
-    @NotEmpty
-    @Email
+
+    private String calle;
+
+    private String numero;
+
+    private String piso;
+
+    private String dpto;
+
     private String email;
+
     private String foto;
+
+    private boolean hab;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date alta;
 
     @ManyToOne
     @JoinColumn(name = "fk_id_ciu", referencedColumnName = "pk_id_ciu")
-    @NotNull
     private Ciudad ciudad;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "proveedor")
     @JsonIgnore
-    private List<Producto> productos;
+    private List<Factura_Compra> facturas_compras;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "proveedor")
+    @JsonIgnore
+    private List<Telefono_Proveedor> telefono_proveedor;
 
     public int getId() {
         return id;
@@ -78,28 +87,36 @@ public class Proveedor implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getCalle() {
+        return calle;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
-    public String getTel() {
-        return tel;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public String getCel() {
-        return cel;
+    public String getPiso() {
+        return piso;
     }
 
-    public void setCel(String cel) {
-        this.cel = cel;
+    public void setPiso(String piso) {
+        this.piso = piso;
+    }
+
+    public String getDpto() {
+        return dpto;
+    }
+
+    public void setDpto(String dpto) {
+        this.dpto = dpto;
     }
 
     public String getEmail() {
@@ -118,12 +135,12 @@ public class Proveedor implements Serializable {
         this.ciudad = ciudad;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public List<Factura_Compra> getFacturas_compras() {
+        return facturas_compras;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setFacturas_compras(List<Factura_Compra> facturas_compras) {
+        this.facturas_compras = facturas_compras;
     }
 
     public String getFoto() {
@@ -132,6 +149,30 @@ public class Proveedor implements Serializable {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public List<Telefono_Proveedor> getTelefono_proveedor() {
+        return telefono_proveedor;
+    }
+
+    public void setTelefono_proveedor(List<Telefono_Proveedor> telefono_proveedor) {
+        this.telefono_proveedor = telefono_proveedor;
+    }
+
+    public Date getAlta() {
+        return alta;
+    }
+
+    public void setAlta(Date alta) {
+        this.alta = alta;
+    }
+
+    public boolean isHab() {
+        return hab;
+    }
+
+    public void setHab(boolean hab) {
+        this.hab = hab;
     }
 
     @Override
